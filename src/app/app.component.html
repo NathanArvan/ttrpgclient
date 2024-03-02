@@ -1,2 +1,8 @@
 
 <router-outlet />
+
+
+<div *ngFor="let map of maps">
+    <div><a (click)="mapClicked(map.mapId)">Map {{map.mapId}}</a></div>
+    <div>{{map.width}} X {{map.length}}</div>
+</div>
