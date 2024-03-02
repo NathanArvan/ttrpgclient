@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { environment } from '../../environment';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Map } from '../models/map';
 import { Observable } from 'rxjs';
 
@@ -9,11 +9,12 @@ import { Observable } from 'rxjs';
 })
 export class MapServiceService {
   private baseURL = environment.apiURL;
+  private headers = new HttpHeaders().set('access-control-allow-origin',"http://localhost:7144/");
 
   constructor(private client: HttpClient) { }
 
   public getMaps() : Observable<Map[]> {
-    return this.client.get<Map[]>(`${this.baseURL}/maps`);
+    return this.client.get<Map[]>(`${this.baseURL}/maps`, {headers: this.headers});
   }
 
   public getMap(mapId: number): Observable<Map> {
