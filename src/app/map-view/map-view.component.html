@@ -1,1 +1,10 @@
-<p>map-view works!</p>
+<div *ngFor="let row of mapMatrix" style="display: flex; flex-direction: row;">
+    <div *ngFor="let cell of row" style="display: flex; flex-direction: column;">
+        <span style="width: 200px; height: 200px; border-width: 1px; border-style: solid; border-color: black;">
+            <span *ngIf="cell?.token else noToken">Token is here!</span>
+            <ng-template #noToken>
+                <span>No Token</span>
+            </ng-template>
+        </span>
+    </div>
+</div>
