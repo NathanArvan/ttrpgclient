@@ -44,8 +44,6 @@ export class MapViewComponent implements OnInit{
       }
     }
     this.map.tokens.forEach(token => {
-      console.log(token, this.mapMatrix);
-      console.log(this.mapMatrix[token.xPosition]);
       this.mapMatrix[token.xPosition][token.yPosition].token = token; 
     })
   }
