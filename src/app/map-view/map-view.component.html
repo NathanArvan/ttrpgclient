@@ -2,7 +2,7 @@
     <div *ngFor="let cell of row" style="display: flex; flex-direction: column;">
         <span style="width: 200px; height: 200px; border-width: 1px; border-style: solid; border-color: black;">
             <span *ngIf="cell?.token else noToken">
-                <img [src]="cell?.image">
+                <img style="width: 200px; height: 200px;" [src]="cell?.image">
             </span>
             <ng-template #noToken>
                 <span>No Token</span>
