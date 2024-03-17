@@ -13,6 +13,10 @@ export class TokenService {
   constructor(private client: HttpClient) { }
 
   public getTokensWithImages(): Observable<Token[]> {
-    return this.client.get<Token[]>(`${this.baseURL}/tokens/tokensWithImages`)
+    return this.client.get<Token[]>(`${this.baseURL}/tokens/tokensWithImages`);
+  }
+
+  public updateToken(body: Token) {
+    return this.client.put<Token>(`${this.baseURL}/tokens`,body);
   }
 }

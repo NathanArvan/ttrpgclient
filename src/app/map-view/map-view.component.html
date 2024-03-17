@@ -12,5 +12,5 @@
 </div>
 <div *ngIf="showMoveMessage">
     {{moveMessage}}
-    <button>Move</button>
+    <button (click)="onMoveButtonClicked()">Move</button>
 </div>

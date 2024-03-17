@@ -89,6 +89,14 @@ export class MapViewComponent implements OnInit{
   }
 
   onMoveButtonClicked() {
-
+    const index = this.map.tokens.findIndex(token => {
+      return token.tokenId === this.selectedToken?.tokenId
+    })
+    if (this.selectedPosition !== null) {
+      this.map.tokens[index].xPosition = this.selectedPosition.xPosition;
+      this.map.tokens[index].yPosition = this.selectedPosition.yPosition;
+    }
+    this.generateMapMatrix();
+    this.tokenService.updateToken(this.map.tokens[index]).subscribe();
   }
 }
