@@ -10,6 +10,7 @@ import { File } from '../models/file';
 export interface MapCell {
   token: Token | null
   image: string | null;
+  borderClass: string | null;
 }
 
 @Component({
@@ -22,6 +23,10 @@ export interface MapCell {
 export class MapViewComponent implements OnInit{
   public map!: Map;
   public mapMatrix: MapCell[][] = [];
+  public selectedPosition : {xPosition: number, yPosition: number} | null = null;
+  public selectedToken: Token | null = null;
+  public showMoveMessage: boolean = false;
+  public moveMessage: string | null = null;
 
   constructor(
     private mapService: MapServiceService,
@@ -48,11 +53,16 @@ export class MapViewComponent implements OnInit{
     for(let i =0; i < this.map.length; i++ ) {
       this.mapMatrix[i] = new Array(this.map.width);
       for(let j = 0; j < this.map.width; j++) {
-        this.mapMatrix[i][j] = {token: null, image: null}
+        this.mapMatrix[i][j] = {token: null, image: null, borderClass: null}
+        if(this.selectedToken?.xPosition === i && this.selectedToken.yPosition === j) {
+          this.mapMatrix[i][j].borderClass = 'red-border';
+        }
+        if(this.selectedPosition?.xPosition === i && this.selectedPosition.yPosition === j) {
+          this.mapMatrix[i][j].borderClass = 'green-border';
+        }
       }
     }
-    this.map.tokens.forEach(token => {
-      
+    this.map.tokens.forEach(token => {  
       this.mapMatrix[token.xPosition][token.yPosition].token = token; 
       if (token.image) {
         var src = 'data:image/jpeg;base64,'+ token.image.fileContents;
@@ -61,9 +71,24 @@ export class MapViewComponent implements OnInit{
     })
   }
 
-  // readImage(image: File) {
-  //   var reader = new FileReader();
-  //   var buffer = Buffer.from(image.fileContents, 'base64');// atob(image.fileContents);
-  //   reader.r(buffer)
-  // }
+  onCellClicked(xPosition : number, yPosition: number) {
+    this.selectedPosition = {xPosition, yPosition};
+    var tokenAtPosition = this.map.tokens.find(token => {
+      return token.xPosition === xPosition && token.yPosition === yPosition
+    })
+    if (tokenAtPosition && tokenAtPosition !== undefined) {
+      this.selectedToken = tokenAtPosition;
+    }
+    if(this.selectedToken && (
+      this.selectedToken.xPosition !== this.selectedPosition.xPosition || this.selectedToken.yPosition !== this.selectedToken.yPosition
+      )) {
+        this.showMoveMessage = true;
+        this.moveMessage = `Move token from ${this.selectedToken.xPosition}, ${this.selectedToken.yPosition} to ${this.selectedPosition.xPosition}, ${this.selectedPosition.yPosition}?` 
+    }
+    this.generateMapMatrix();
+  }
+
+  onMoveButtonClicked() {
+
+  }
 }

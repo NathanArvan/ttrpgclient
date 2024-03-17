@@ -1,12 +1,16 @@
-<div *ngFor="let row of mapMatrix" style="display: flex; flex-direction: row;">
-    <div *ngFor="let cell of row" style="display: flex; flex-direction: column;">
-        <span style="width: 200px; height: 200px; border-width: 1px; border-style: solid; border-color: black;">
+<div *ngFor="let row of mapMatrix; let xIndex = index" style="display: flex; flex-direction: row;">
+    <div *ngFor="let cell of row; let yIndex = index" style="display: flex; flex-direction: column;">
+        <span (click)="onCellClicked(xIndex, yIndex)" [ngClass]="cell.borderClass" style="width: 50px; height: 50px;">
             <span *ngIf="cell?.token else noToken">
-                <img style="width: 200px; height: 200px;" [src]="cell?.image">
+                <img style="width: 50px; height: 50px;" [src]="cell?.image">
             </span>
             <ng-template #noToken>
                 <span>No Token</span>
             </ng-template>
         </span>
     </div>
+</div>
+<div *ngIf="showMoveMessage">
+    {{moveMessage}}
+    <button>Move</button>
 </div>
