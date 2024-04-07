@@ -1,13 +1,13 @@
 import { Injectable } from '@angular/core';
 import { environment } from '../../environment';
 import { HttpClient } from '@angular/common/http';
-import { Map } from '../models/map';
+import { Map, MapCreateDTO } from '../models/map';
 import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
-export class MapServiceService {
+export class MapService {
   private baseURL = environment.apiURL;
 
   constructor(private client: HttpClient) { }
@@ -20,7 +20,7 @@ export class MapServiceService {
     return this.client.get<Map>(`${this.baseURL}/maps/${mapId}`)
   }
 
-  public createMap(map: Map): Observable<Map> {
+  public createMap(map: MapCreateDTO): Observable<Map> {
     return this.client.post<Map>(`${this.baseURL}/maps}`, map);
   }
 }

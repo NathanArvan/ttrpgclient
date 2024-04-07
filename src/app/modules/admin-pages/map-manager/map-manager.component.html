@@ -1,1 +1,20 @@
-<p>map-manager works!</p>
+<div style="display: flex; gap: 1 rem;">
+    <div class="card">
+        <h4>Maps</h4>
+        <div *ngFor="let map of maps">
+            <div>Id: {{map.mapId}}, Width: {{map.width}}, Length: {{map.length}}</div>
+        </div>
+    </div>
+    <div class="card">
+        <h4>Create Map</h4>
+        <form>
+            <div>
+                <label for="width">Width</label>
+                <input id="width" type="number"/>
+                <label for="height">Height</label>
+                <input id="height" type="number"/>
+                <button (click)="createSubmitClicked()">Submit</button>
+            </div>
+        </form>
+    </div>
+</div>

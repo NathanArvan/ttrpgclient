@@ -8,3 +8,10 @@ export interface Map {
     width: number;
     tokens: Token[];
 }
+
+export interface MapCreateDTO {
+    campaignId: number | null;
+    image: string | null;
+    length: number;
+    width: number;
+}

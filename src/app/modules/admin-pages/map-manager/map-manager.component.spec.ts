@@ -1,6 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { MapManagerComponent } from './map-manager.component';
+import { HttpClient, HttpHandler } from '@angular/common/http';
 
 describe('MapManagerComponent', () => {
   let component: MapManagerComponent;
@@ -8,7 +9,8 @@ describe('MapManagerComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [MapManagerComponent]
+      imports: [MapManagerComponent],
+      providers: [HttpClient, HttpHandler]
     })
     .compileComponents();
     

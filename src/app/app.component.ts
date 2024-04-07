@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, RouterOutlet } from '@angular/router';
 import { Map } from './models/map';
-import { MapServiceService } from './services/map-service.service';
+import { MapService } from './services/map.service';
 import { CommonModule } from '@angular/common';
 
 @Component({
@@ -16,7 +16,7 @@ export class AppComponent implements OnInit {
   maps!: Map[]; 
 
   constructor(
-    private mapService: MapServiceService,
+    private mapService: MapService,
     private router: Router
     ) {}
 

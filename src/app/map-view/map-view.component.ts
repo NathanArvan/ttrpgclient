@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { MapServiceService } from '../services/map-service.service';
+import { MapService } from '../services/map.service';
 import { ActivatedRoute } from '@angular/router';
 import { Map } from '../models/map';
 import { Token } from '../models/token';
@@ -29,7 +29,7 @@ export class MapViewComponent implements OnInit{
   public moveMessage: string | null = null;
 
   constructor(
-    private mapService: MapServiceService,
+    private mapService: MapService,
     private tokenService: TokenService,
     private route: ActivatedRoute,
   ) {}
