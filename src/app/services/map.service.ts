@@ -21,6 +21,6 @@ export class MapService {
   }
 
   public createMap(map: MapCreateDTO): Observable<Map> {
-    return this.client.post<Map>(`${this.baseURL}/maps}`, map);
+    return this.client.post<Map>(`${this.baseURL}/maps`, map);
   }
 }

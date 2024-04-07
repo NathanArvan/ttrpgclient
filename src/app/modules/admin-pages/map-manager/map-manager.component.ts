@@ -2,19 +2,19 @@ import { Component, OnInit } from '@angular/core';
 import { MapService } from '../../../services/map.service';
 import { Map, MapCreateDTO } from '../../../models/map';
 import { CommonModule } from '@angular/common';
-import { FormBuilder, FormControl, Validators } from '@angular/forms';
+import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-map-manager',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, ReactiveFormsModule],
   templateUrl: './map-manager.component.html',
   styleUrl: './map-manager.component.css'
 })
 export class MapManagerComponent implements OnInit{
 
   public maps: Map[] = [];
-  public createMapForm = new FormBuilder().group({
+  public createMapForm = new FormGroup({
     width: new FormControl<number | null>(null, Validators.required),
     length: new FormControl<number | null>(null, Validators.required),
   }
@@ -24,7 +24,6 @@ export class MapManagerComponent implements OnInit{
 
   constructor(
     private mapService: MapService,
-    private formBuilder: FormBuilder
   ) {}
 
   ngOnInit(): void {
@@ -34,6 +33,7 @@ export class MapManagerComponent implements OnInit{
   }
 
   createSubmitClicked() {
+    console.log(this.createMapForm)
     if (this.createMapForm.valid) {
       const payload: MapCreateDTO = {
         width: this.createMapForm.controls.width.value as number,
@@ -41,7 +41,10 @@ export class MapManagerComponent implements OnInit{
         campaignId: null,
         image: null,
       }
-      this.mapService.createMap(payload)
+      console.log(payload)
+      this.mapService.createMap(payload).subscribe(map => {
+        this.maps.push(map);
+      })
     }
   }
 }

@@ -1,5 +1,11 @@
 .card {
     border: 1px;
     border-style: solid;
-    border-radius: 2 rem;
+    border-radius: 4px;
+    padding: 4px;
+}
+
+.container {
+    display: flex;
+    gap: 2px;
 }
