@@ -2,11 +2,24 @@
     <div class="card">
         <h4>Maps</h4>
         <div *ngFor="let map of maps">
-            <div class="container">Id: {{map.mapId}}, Width: {{map.width}}, Length: {{map.length}}</div>
+            <div (click)="onMapSelected(map)" class="container">Id: {{map.mapId}}, Width: {{map.width}}, Length: {{map.length}}</div>
         </div>
     </div>
-    <div class="card">
+    <div class="card" *ngIf="selectedMap === null">
         <h4>Create Map</h4>
+        <form [formGroup]="createMapForm">
+            <div class="container">
+                <label for="width">Width</label>
+                <input id="width" type="number" formControlName="width"/>
+                <label for="height">length</label>
+                <input id="height" type="number" formControlName="length"/>
+                <button (click)="createSubmitClicked()">Submit</button>
+            </div>
+        </form>
+    </div>
+    <div class="card" *ngIf="selectedMap !== null">
+        <h4>Edit Map</h4>
+        <button (click)="deselectMapClicked()">Deselect</button>
         <form [formGroup]="createMapForm">
             <div class="container">
                 <label for="width">Width</label>

@@ -14,6 +14,7 @@ import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angula
 export class MapManagerComponent implements OnInit{
 
   public maps: Map[] = [];
+  public selectedMap : Map | null = null;
   public createMapForm = new FormGroup({
     width: new FormControl<number | null>(null, Validators.required),
     length: new FormControl<number | null>(null, Validators.required),
@@ -32,8 +33,13 @@ export class MapManagerComponent implements OnInit{
     })
   }
 
+  onMapSelected(event: Map) {
+    this.selectedMap = event;
+    this.createMapForm.controls.length.setValue(event.length);
+    this.createMapForm.controls.width.setValue(event.width);
+  }
+
   createSubmitClicked() {
-    console.log(this.createMapForm)
     if (this.createMapForm.valid) {
       const payload: MapCreateDTO = {
         width: this.createMapForm.controls.width.value as number,
@@ -41,10 +47,15 @@ export class MapManagerComponent implements OnInit{
         campaignId: null,
         image: null,
       }
-      console.log(payload)
       this.mapService.createMap(payload).subscribe(map => {
         this.maps.push(map);
       })
     }
+  }
+
+  deselectMapClicked() {
+    this.selectedMap = null;
+    this.createMapForm.controls.length.setValue(null);
+    this.createMapForm.controls.width.setValue(null);
   }
 }
