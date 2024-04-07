@@ -15,3 +15,11 @@ export interface MapCreateDTO {
     length: number;
     width: number;
 }
+
+export interface MapUpdateDTO {
+    mapId: number;
+    campaignId: number | null;
+    image: string | null;
+    length: number;
+    width: number;
+}

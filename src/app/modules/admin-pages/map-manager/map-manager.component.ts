@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { MapService } from '../../../services/map.service';
-import { Map, MapCreateDTO } from '../../../models/map';
+import { Map, MapCreateDTO, MapUpdateDTO } from '../../../models/map';
 import { CommonModule } from '@angular/common';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 
@@ -28,6 +28,10 @@ export class MapManagerComponent implements OnInit{
   ) {}
 
   ngOnInit(): void {
+    this.getMaps();
+  }
+
+  getMaps() : void {
     this.mapService.getMaps().subscribe(maps => {
       this.maps = maps;
     })
@@ -57,5 +61,20 @@ export class MapManagerComponent implements OnInit{
     this.selectedMap = null;
     this.createMapForm.controls.length.setValue(null);
     this.createMapForm.controls.width.setValue(null);
+  }
+
+  updateSubmitClicked() {
+    if (this.createMapForm.valid) {
+      const payload: MapUpdateDTO = {
+        mapId: this.selectedMap?.mapId as number,
+        width: this.createMapForm.controls.width.value as number,
+        length: this.createMapForm.controls.length.value as number,
+        campaignId: null,
+        image: null,
+      }
+      this.mapService.updateMap(payload).subscribe(map => {
+        this.getMaps();
+      })
+    }
   }
 }

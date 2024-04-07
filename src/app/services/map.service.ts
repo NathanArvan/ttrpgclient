@@ -23,4 +23,8 @@ export class MapService {
   public createMap(map: MapCreateDTO): Observable<Map> {
     return this.client.post<Map>(`${this.baseURL}/maps`, map);
   }
+
+  public updateMap(map: MapCreateDTO): Observable<Map> {
+    return this.client.put<Map>(`${this.baseURL}/maps`, map);
+  }
 }
