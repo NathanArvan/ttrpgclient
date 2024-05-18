@@ -5,7 +5,6 @@ import { Map, MapCell } from '../models/map';
 import { Token } from '../models/token';
 import { CommonModule } from '@angular/common';
 import { TokenService } from '../services/token.service';
-import { File } from '../models/file';
 
 
 

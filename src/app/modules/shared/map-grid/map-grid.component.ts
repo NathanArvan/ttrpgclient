@@ -1,8 +1,6 @@
 import { Token } from '../../../models/token';
-import { Component } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { MapCell, Map } from '../../../models/map';
-import { MapService } from '../../../services/map.service';
 import { TokenService } from '../../../services/token.service';
 import { CommonModule } from '@angular/common';
 
@@ -14,7 +12,8 @@ import { CommonModule } from '@angular/common';
   styleUrl: './map-grid.component.css'
 })
 export class MapGridComponent {
-  public map!: Map;
+  @Input() map: Map = {campaignId: 0, mapId: 0, length: 0, width:0, image: '', tokens: []};
+  @Output() tokenPositionChanged: EventEmitter<Token> = new EventEmitter<Token>()
   public mapMatrix: MapCell[][] = [];
   public selectedPosition : {xPosition: number, yPosition: number} | null = null;
   public selectedToken: Token | null = null;
@@ -22,23 +21,14 @@ export class MapGridComponent {
   public moveMessage: string | null = null;
 
   constructor(
-    private mapService: MapService,
     private tokenService: TokenService,
-    private route: ActivatedRoute,
   ) {}
 
   ngOnInit(): void {
-    this.route.url.subscribe(url => {
-      const mapId = url[url.length -1];
-      this.mapService.getMap((parseInt(mapId.toString()))).subscribe(map => {
-        this.map = map;
-        this.tokenService.getTokensWithImages().subscribe(tokens => {
-          this.map.tokens = tokens;
-          this.generateMapMatrix();
-        })
-      })
+    this.tokenService.getTokensWithImages().subscribe(tokens => {
+      this.map.tokens = tokens;
+      this.generateMapMatrix();
     })
-
   }
 
   generateMapMatrix() {
