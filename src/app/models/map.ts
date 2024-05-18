@@ -23,3 +23,9 @@ export interface MapUpdateDTO {
     length: number;
     width: number;
 }
+
+export interface MapCell {
+    token: Token | null
+    image: string | null;
+    borderClass: string | null;
+  }

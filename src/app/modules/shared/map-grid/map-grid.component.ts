@@ -1,22 +1,19 @@
-import { Component, OnInit } from '@angular/core';
-import { MapService } from '../services/map.service';
+import { Token } from '../../../models/token';
+import { Component } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { Map, MapCell } from '../models/map';
-import { Token } from '../models/token';
+import { MapCell, Map } from '../../../models/map';
+import { MapService } from '../../../services/map.service';
+import { TokenService } from '../../../services/token.service';
 import { CommonModule } from '@angular/common';
-import { TokenService } from '../services/token.service';
-import { File } from '../models/file';
-
-
 
 @Component({
-  selector: 'app-map-view',
+  selector: 'app-map-grid',
   standalone: true,
   imports: [CommonModule],
-  templateUrl: './map-view.component.html',
-  styleUrl: './map-view.component.css'
+  templateUrl: './map-grid.component.html',
+  styleUrl: './map-grid.component.css'
 })
-export class MapViewComponent implements OnInit{
+export class MapGridComponent {
   public map!: Map;
   public mapMatrix: MapCell[][] = [];
   public selectedPosition : {xPosition: number, yPosition: number} | null = null;

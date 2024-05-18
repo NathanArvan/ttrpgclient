@@ -1,0 +1,11 @@
+.red-border {
+    border-color: red;
+    border-width: 1px; 
+    border-style: solid;
+}
+
+.green-border {
+    border-color: green;
+    border-width: 1px; 
+    border-style: solid;
+}
