@@ -11,7 +11,7 @@ import { CommonModule } from '@angular/common';
   templateUrl: './app.component.html',
   styleUrl: './app.component.css'
 })
-export class AppComponent implements OnInit {
+export class AppComponent {
   title = 'ttrpgClient';
   maps!: Map[]; 
 
@@ -19,14 +19,4 @@ export class AppComponent implements OnInit {
     private mapService: MapService,
     private router: Router
     ) {}
-
-  ngOnInit(): void {
-    this.mapService.getMaps().subscribe(maps => {
-      this.maps = maps;
-    })
-  }
-
-  mapClicked(mapId: number) {
-    this.router.navigate(['maps', mapId])
-  }
 }
