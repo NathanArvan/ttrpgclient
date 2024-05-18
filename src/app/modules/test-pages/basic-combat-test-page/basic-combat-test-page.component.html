@@ -1,1 +1,3 @@
 <app-map-grid [map]="map" (tokenPositionChanged)="onTokenUpdate($event)"></app-map-grid>
+<br>
+<div *ngFor="let ability of abilities"> {{ability.name}}</div>

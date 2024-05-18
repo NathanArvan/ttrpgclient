@@ -1,5 +1,5 @@
 import { Token } from '../../../models/token';
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, Output } from '@angular/core';
 import { MapCell, Map } from '../../../models/map';
 import { CommonModule } from '@angular/common';
 
@@ -10,7 +10,7 @@ import { CommonModule } from '@angular/common';
   templateUrl: './map-grid.component.html',
   styleUrl: './map-grid.component.css'
 })
-export class MapGridComponent {
+export class MapGridComponent implements OnChanges{
   @Input() map: Map | null  = null;
   @Output() tokenPositionChanged: EventEmitter<Token> = new EventEmitter<Token>()
   public mapMatrix: MapCell[][] = [];
@@ -21,7 +21,7 @@ export class MapGridComponent {
 
   constructor() {}
 
-  ngOnInit(): void {
+  ngOnChanges(): void {
     this.generateMapMatrix();
   }
 

@@ -11,10 +11,10 @@ export class CharacterService {
   constructor(private client: HttpClient) { }
 
   public getCharacters() {
-    return this.client.get(`${this.baseURL}/characters`)
+    return this.client.get<any[]>(`${this.baseURL}/characters`)
   }
 
   public updateCharacter(id: number, body : any) {
-    return this.client.put(`${this.baseURL}/characters/${id}`, body)
+    return this.client.put<any>(`${this.baseURL}/characters/${id}`, body)
   }
 }

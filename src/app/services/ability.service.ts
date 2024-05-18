@@ -11,6 +11,6 @@ export class AbilityService {
   constructor(private client: HttpClient) { }
 
   public getAbilities() {
-    return this.client.get(`${this.baseURL}/abilities`)
+    return this.client.get<any[]>(`${this.baseURL}/abilities`)
   }
 }
