@@ -1,6 +1,5 @@
 import { Component } from '@angular/core';
-import { MapCell } from '../map-view/map-view.component';
-import { Map } from '../models/map';
+import { Map, MapCell } from '../models/map';
 
 import { Token } from '../models/token';
 import { TokenService } from '../services/token.service';

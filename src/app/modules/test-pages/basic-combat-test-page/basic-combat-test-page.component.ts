@@ -14,7 +14,7 @@ import { Token } from '../../../models/token';
 })
 export class BasicCombatTestPageComponent implements OnInit {
 
-  public map!: Map;
+  public map: Map | null = null;
   constructor(
     private mapService: MapService,
     private tokenService: TokenService
@@ -23,8 +23,10 @@ export class BasicCombatTestPageComponent implements OnInit {
   ngOnInit(): void {
     this.mapService.getMap(1).subscribe(map => {
       this.map = map;
-      this.tokenService.getTokensWithImages().subscribe(tokens => {
-        this.map.tokens = tokens;
+        this.tokenService.getTokensWithImages().subscribe(tokens => {
+        if (this.map !== null) {
+          this.map.tokens = tokens;
+        }
       })
     })
   }
