@@ -10,6 +10,9 @@ export const routes: Routes = [
     {
         component: MapManagerComponent,
         path: 'admin/map-manager'
-
+    },
+    {
+        path: 'test-pages',
+        loadChildren: () => import('./modules/test-pages/test-pages.module').then(m => m.TestPagesModule)
     }
 ];

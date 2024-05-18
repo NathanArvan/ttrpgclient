@@ -80,6 +80,6 @@ export class MapGridComponent {
       this.map.tokens[index].yPosition = this.selectedPosition.yPosition;
     }
     this.generateMapMatrix();
-    this.tokenService.updateToken(this.map.tokens[index]).subscribe();
+    this.tokenPositionChanged.emit(this.map.tokens[index]);
   }
 }
