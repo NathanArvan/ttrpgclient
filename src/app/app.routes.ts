@@ -1,6 +1,5 @@
 import { Routes } from '@angular/router';
 import { MapViewComponent } from './map-view/map-view.component';
-import { MapManagerComponent } from './modules/admin-pages/map-manager/map-manager.component';
 
 export const routes: Routes = [
     {
@@ -8,8 +7,8 @@ export const routes: Routes = [
         path: 'maps/:id'
     },  
     {
-        component: MapManagerComponent,
-        path: 'admin/map-manager'
+        path: 'admin',
+        loadChildren: () => import('./modules/admin-pages/admin-pages.module').then(m => m.AdminPagesModule)
     },
     {
         path: 'test-pages',
