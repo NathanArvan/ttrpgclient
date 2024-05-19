@@ -5,6 +5,7 @@ import { AdminHomePageComponent } from './admin-home-page/admin-home-page.compon
 import { CharacterManagerComponent } from './character-manager/character-manager.component';
 import { MapManagerComponent } from './map-manager/map-manager.component';
 import { TokenManagerComponent } from './token-manager/token-manager.component';
+import { AbilityManagerComponent } from './ability-manager/ability-manager.component';
 
 const routes: Routes = [
   {
@@ -22,6 +23,10 @@ const routes: Routes = [
   {
     path: 'token-manager',
     component: TokenManagerComponent
+  },
+  {
+    path: 'ability-manager',
+    component: AbilityManagerComponent
   }
 
 ]

@@ -1,0 +1,26 @@
+<h4>Abilities</h4>
+<div *ngFor="let ability of abilities">
+    <div>{{ability.name}}  {{ability.description}}</div>
+</div>
+
+<br>
+<h4>Create Ability</h4>
+<form [formGroup]="createAbilityForm">
+    <div>
+        <input id="name" formControlName="name"/>
+        <label for="name">Name</label>
+    </div>
+    <div>
+        <input id="description" formControlName="description"/>
+        <label for="description">Description</label>
+    </div>
+    <div>
+        <input type="number" id="range" formControlName="range"/>
+        <label for="range">Range</label>
+    </div>
+    <div>
+        <input type="number" id="duration" formControlName="duration"/>
+        <label for="duration">Duration</label>
+    </div>
+</form>
+<button (click)="createAbility()">Create Ability</button>
