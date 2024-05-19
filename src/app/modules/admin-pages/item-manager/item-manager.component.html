@@ -1,0 +1,23 @@
+<h4>Items:</h4>
+<div *ngFor="let item of items">Name {{item.weight}} Weight: {{item.weight}}</div>
+<br>
+<h4>Create Item</h4>
+<form [formGroup]="createItemForm">
+    <div>
+        <input id="name" formControlName="name">
+        <label for="name">Name</label>
+    </div>
+    <div>
+        <input id="weight" formControlName="weight" />
+        <label for="weight">Weight</label>
+    </div>
+    <div>
+        <select id="ability" multiple formControlName="abilities">
+            <ng-container *ngFor="let ability of abilities">
+                <option [value]="ability">{{ability.name}}</option>
+            </ng-container>
+        </select>
+        <label>Abilities</label>
+    </div>
+    <button (click)="createItem()">Create Item</button>
+</form>

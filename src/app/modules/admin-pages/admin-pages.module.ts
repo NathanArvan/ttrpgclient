@@ -6,6 +6,7 @@ import { CharacterManagerComponent } from './character-manager/character-manager
 import { MapManagerComponent } from './map-manager/map-manager.component';
 import { TokenManagerComponent } from './token-manager/token-manager.component';
 import { AbilityManagerComponent } from './ability-manager/ability-manager.component';
+import { ItemManagerComponent } from './item-manager/item-manager.component';
 
 const routes: Routes = [
   {
@@ -27,8 +28,11 @@ const routes: Routes = [
   {
     path: 'ability-manager',
     component: AbilityManagerComponent
+  },
+  {
+    path: 'item-manager',
+    component: ItemManagerComponent
   }
-
 ]
 
 @NgModule({
