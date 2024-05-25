@@ -10,5 +10,5 @@ export interface Item {
 export interface CreateItemDto {
     name: string;
     weight: number | null;
-    abilities: Ability[] | null;
+    abilityIds: number[] | null;
 }

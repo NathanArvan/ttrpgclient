@@ -39,11 +39,17 @@ export class ItemManagerComponent implements OnInit {
 
   createItem() {
     if(this.createItemForm.valid && this.createItemForm.controls.name.value !== null) {
+      const abilities = this.createItemForm.controls.abilities.value;
+      let abilityIds: number[] = [];
+      if (abilities !== null && abilities.length > 0) {
+        abilityIds = abilities.map(ability => ability.abilityId)
+      }
       const payload : CreateItemDto = {
         name: this.createItemForm.controls.name.value,
         weight: this.createItemForm.controls.weight.value,
-        abilities: this.createItemForm.controls.abilities.value
+        abilityIds: abilityIds
       }
+
       this.itemService.createItem(payload).subscribe();
     }
   }
