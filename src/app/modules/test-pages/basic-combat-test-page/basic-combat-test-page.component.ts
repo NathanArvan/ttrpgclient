@@ -28,7 +28,7 @@ export class BasicCombatTestPageComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.mapService.getMap(1).subscribe(map => {
+    this.mapService.getTestMap().subscribe(map => {
       this.map = map;
         this.tokenService.getTokensWithImages().subscribe(tokens => {
         if (this.map !== null) {
