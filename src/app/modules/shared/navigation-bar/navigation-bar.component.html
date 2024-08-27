@@ -1,0 +1,23 @@
+<nav>
+    <div class="dropdown">
+        <button class="dropbtn">Home</button>
+        <div class="dropdown-content">
+            <a [href]="['/']">Home</a>
+        </div>
+    </div>
+    <div class="dropdown">
+        <button class="dropbtn">Admin Pages</button>
+        <div class="dropdown-content">
+          <a [href]="['admin/character-manager']">Character manager</a>
+          <a [href]="['admin/item-manager']">Item manager</a>
+          <a [href]="['admin/ability-manager']">Ability manager</a>
+          <a [href]="['admin/map-manager']">Map manager</a>
+        </div>
+    </div> 
+    <div class="dropdown">
+        <button class="dropbtn">Test Pages</button>
+        <div class="dropdown-content">
+          <a [href]="['test-pages/basic-combat']">Basic Combat Page</a>
+        </div>
+    </div> 
+</nav>
