@@ -2,11 +2,16 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule, Routes } from '@angular/router';
 import { BasicCombatTestPageComponent } from './basic-combat-test-page/basic-combat-test-page.component';
+import { PhaserTestPageComponent } from './phaser-test-page/phaser-test-page.component';
 
 const routes : Routes = [
-    {
+  {
     path: 'basic-combat',
     component: BasicCombatTestPageComponent
+  },
+  {
+    path: 'phaserjs-test',
+    component: PhaserTestPageComponent
   }
 ]
 
