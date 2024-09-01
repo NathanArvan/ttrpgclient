@@ -1,3 +1,16 @@
-<app-map-grid [map]="map" (tokenPositionChanged)="onTokenUpdate($event)"></app-map-grid>
+<div style="position: relative; z-index: 1;" class="map-container">
+    <div style="position: relative;z-index: 2;">
+        <app-map-grid  [map]="map" (tokenPositionChanged)="onTokenUpdate($event)"></app-map-grid>
+    </div>
+    <img src="assets/game-art/Fantasy Arena.jpg" 
+    style="
+    position: absolute; 
+    width: 1300px; 
+    height: 700px;
+    top: 0px;
+    opacity: .5;
+    "/>
+
+</div>
 <br>
 <div *ngFor="let ability of abilities"> {{ability.name}}</div>
