@@ -36,11 +36,17 @@ class Example extends Phaser.Scene {
       this.load.setBaseURL('http://localhost:4200');
 
       this.load.image('background', 'assets/game-art/World-Atlas/Social/01.png');
+
+      this.load.image('character', 'assets/game-art/Tiny RPG Character Asset Pack v1.03 -Free Soldier&Orc/Characters(100x100)/Soldier/Soldier/Soldier-Idle.png');
+
+      this.load.image('enemy', 'assets/game-art/Tiny RPG Character Asset Pack v1.03 -Free Soldier&Orc/Characters(100x100)/Orc/Orc/Orc-Idle.png');
   }
 
   create ()
   {
       this.add.image(400, 300, 'background');
+      this.add.image(100, 100, 'character');
+      this.add.image(400, 400, 'enemy');
   }
 
   
