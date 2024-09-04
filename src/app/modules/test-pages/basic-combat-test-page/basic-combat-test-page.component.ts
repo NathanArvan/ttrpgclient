@@ -1,4 +1,4 @@
-import { Component, OnInit, signal } from '@angular/core';
+import { Component, computed, OnInit, signal } from '@angular/core';
 import { MapService } from '../../../services/map.service';
 import { Map, MapCell } from '../../../models/map';
 import { TokenService } from '../../../services/token.service';
@@ -29,6 +29,7 @@ export class BasicCombatTestPageComponent implements OnInit {
   public characters: any[] =[];
   public mapMatrix: MapCell[][] = [];
   public selectedPosition = signal<{xPosition: number, yPosition: number} | null>(null);
+  public characterIsSelected = computed(() => this.selectedPosition()?.xPosition === 1 && this.selectedPosition()?.yPosition === 1 )
   constructor(
     private mapService: MapService,
     private tokenService: TokenService,
