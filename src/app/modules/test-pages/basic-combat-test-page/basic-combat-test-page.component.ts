@@ -8,6 +8,14 @@ import { AbilityService } from '../../../services/ability.service';
 import { CharacterService } from '../../../services/character.service';
 import { CommonModule } from '@angular/common';
 
+export enum SelectionStates {
+  'NothingSelected',
+  'CharacterSelected',
+  'AttackSelected',
+  'MoveSelected',
+  'EnemySelected'
+}
+
 @Component({
   selector: 'app-basic-combat-test-page',
   standalone: true,
@@ -16,6 +24,7 @@ import { CommonModule } from '@angular/common';
   styleUrl: './basic-combat-test-page.component.css'
 })
 export class BasicCombatTestPageComponent implements OnInit {
+  public states = SelectionStates;
   public map : Map = {
     length: 5,
     width: 10,
@@ -29,7 +38,8 @@ export class BasicCombatTestPageComponent implements OnInit {
   public characters: any[] =[];
   public mapMatrix: MapCell[][] = [];
   public selectedPosition = signal<{xPosition: number, yPosition: number} | null>(null);
-  public characterIsSelected = computed(() => this.selectedPosition()?.xPosition === 1 && this.selectedPosition()?.yPosition === 1 )
+  public characterIsSelected = computed(() => this.selectedPosition()?.xPosition === 1 && this.selectedPosition()?.yPosition === 1 );
+  public selectionState = signal<SelectionStates>(SelectionStates.NothingSelected);
   constructor(
     private mapService: MapService,
     private tokenService: TokenService,
@@ -71,6 +81,11 @@ export class BasicCombatTestPageComponent implements OnInit {
           }
           if(selectedXPosition === 1 && selectedYPosition === 1 && selectedXPosition === i && selectedYPosition === j) {
             this.mapMatrix[i][j].borderClass = 'red-border';
+            this.selectionState.set(SelectionStates.CharacterSelected);
+          }
+          if(selectedXPosition === 4 && selectedYPosition === 4 && this.selectionState() === SelectionStates.AttackSelected ) {
+            console.log("Orc attacked")
+            this.selectionState.set(SelectionStates.NothingSelected);
           }
         }
       }
@@ -103,5 +118,9 @@ export class BasicCombatTestPageComponent implements OnInit {
   
   onTokenUpdate(event: Token) {
     this.tokenService.updateToken(event).subscribe();
+  }
+
+  onAttackButtonClicked() {
+    this.selectionState.set(SelectionStates.AttackSelected)
   }
 }
