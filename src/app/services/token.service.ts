@@ -23,7 +23,7 @@ export class TokenService {
   public getMockTokens(): Observable<Token[]> {
     const result : Token[] = [{
       tokenId: 1,
-      src: 'assets/game-art/Tiny RPG Character Asset Pack v1.03 -Free Soldier&Orc/Characters(100x100)/Soldier/Soldier/Soldier-Idle.png',
+      src: 'assets/game-art/Tiny RPG Character Asset Pack v1.03 -Free Soldier&Orc/Characters(100x100)/Soldier/Soldier/Soldier-Idle Resize.png',
       xPosition: 1,
       yPosition: 1,
       mapId: 1,
@@ -32,7 +32,7 @@ export class TokenService {
     },
     {
       tokenId: 2,
-      src: 'assets/game-art/Tiny RPG Character Asset Pack v1.03 -Free Soldier&Orc/Characters(100x100)/Orc/Orc/Orc-Idle.png',
+      src: 'assets/game-art/Tiny RPG Character Asset Pack v1.03 -Free Soldier&Orc/Characters(100x100)/Orc/Orc/Orc-Idle-Resize.png',
       xPosition: 4,
       yPosition: 4,
       mapId: 1,
