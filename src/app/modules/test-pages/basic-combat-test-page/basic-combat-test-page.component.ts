@@ -66,7 +66,6 @@ export class BasicCombatTestPageComponent implements OnInit {
   }
 
   generateMapMatrix() {
-    console.log(this.map);
     const selectedXPosition = this.selectedPosition()?.xPosition;
     const selectedYPosition = this.selectedPosition()?.yPosition;
     if (this.map !== null) {
@@ -95,7 +94,6 @@ export class BasicCombatTestPageComponent implements OnInit {
           this.mapMatrix[token.xPosition][token.yPosition].image = token.src;
         }
       })
-      console.log(this.mapMatrix);
     }
   }
 
