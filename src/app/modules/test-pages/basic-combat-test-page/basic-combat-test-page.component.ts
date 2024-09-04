@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, signal } from '@angular/core';
 import { MapService } from '../../../services/map.service';
 import { Map, MapCell } from '../../../models/map';
 import { TokenService } from '../../../services/token.service';
@@ -28,7 +28,7 @@ export class BasicCombatTestPageComponent implements OnInit {
   public abilities: any[] = [];
   public characters: any[] =[];
   public mapMatrix: MapCell[][] = [];
-  public selectedPosition : {xPosition: number, yPosition: number} | null = null;
+  public selectedPosition = signal<{xPosition: number, yPosition: number} | null>(null);
   constructor(
     private mapService: MapService,
     private tokenService: TokenService,
@@ -56,6 +56,8 @@ export class BasicCombatTestPageComponent implements OnInit {
 
   generateMapMatrix() {
     console.log(this.map);
+    const selectedXPosition = this.selectedPosition()?.xPosition;
+    const selectedYPosition = this.selectedPosition()?.yPosition;
     if (this.map !== null) {
       this.mapMatrix = new Array(this.map.length);
       console.log(this.mapMatrix);
@@ -63,8 +65,11 @@ export class BasicCombatTestPageComponent implements OnInit {
         this.mapMatrix[i] = new Array(this.map.width);
         for(let j = 0; j < this.map.width; j++) {
           this.mapMatrix[i][j] = {token: null, image: null, borderClass: null}
-          if(this.selectedPosition?.xPosition === i && this.selectedPosition.yPosition === j) {
+          if(selectedXPosition === i && selectedYPosition === j) {
             this.mapMatrix[i][j].borderClass = 'green-border';
+          }
+          if(selectedXPosition === 1 && selectedYPosition === 1 && selectedXPosition === i && selectedYPosition === j) {
+            this.mapMatrix[i][j].borderClass = 'red-border';
           }
         }
       }
@@ -79,10 +84,10 @@ export class BasicCombatTestPageComponent implements OnInit {
   }
 
   onCellClicked(xPosition : number, yPosition: number) {
-    this.selectedPosition = {xPosition, yPosition};
-    var tokenAtPosition = this.map?.tokens.find(token => {
-      return token.xPosition === xPosition && token.yPosition === yPosition
-    })
+    this.selectedPosition.set({xPosition, yPosition});
+    // var tokenAtPosition = this.map?.tokens.find(token => {
+    //   return token.xPosition === xPosition && token.yPosition === yPosition
+    // })
     // if (tokenAtPosition && tokenAtPosition !== undefined) {
     //   this.selectedToken = tokenAtPosition;
     // }
