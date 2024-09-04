@@ -7,6 +7,7 @@ import { Token } from '../../../models/token';
 import { AbilityService } from '../../../services/ability.service';
 import { CharacterService } from '../../../services/character.service';
 import { CommonModule } from '@angular/common';
+import { Ability } from '../../../models/ability';
 
 export enum SelectionStates {
   'NothingSelected',
@@ -40,6 +41,7 @@ export class BasicCombatTestPageComponent implements OnInit {
   public selectedPosition = signal<{xPosition: number, yPosition: number} | null>(null);
   public characterIsSelected = computed(() => this.selectedPosition()?.xPosition === 1 && this.selectedPosition()?.yPosition === 1 );
   public selectionState = signal<SelectionStates>(SelectionStates.NothingSelected);
+  public characterPosition = signal<{xPosition: number, yPosition: number}>({xPosition:1, yPosition:1});
   constructor(
     private mapService: MapService,
     private tokenService: TokenService,
@@ -70,7 +72,6 @@ export class BasicCombatTestPageComponent implements OnInit {
     const selectedYPosition = this.selectedPosition()?.yPosition;
     if (this.map !== null) {
       this.mapMatrix = new Array(this.map.length);
-      console.log(this.mapMatrix);
       for(let i =0; i < this.map.length; i++ ) {
         this.mapMatrix[i] = new Array(this.map.width);
         for(let j = 0; j < this.map.width; j++) {
@@ -118,7 +119,17 @@ export class BasicCombatTestPageComponent implements OnInit {
     this.tokenService.updateToken(event).subscribe();
   }
 
-  onAttackButtonClicked() {
-    this.selectionState.set(SelectionStates.AttackSelected)
+  onActionButtonClicked($event: Ability) {
+    if($event.abilityId === 1) {
+      this.selectionState.set(SelectionStates.AttackSelected)
+    } 
+    if ($event.abilityId === 2) {
+      this.selectionState.set(SelectionStates.MoveSelected);
+    }
+
+  }
+
+  moveCharacterToSquare() {
+
   }
 }

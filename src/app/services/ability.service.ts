@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { environment } from '../../environment';
 import { Ability, CreateAbilityDTO } from '../models/ability';
 import { of } from 'rxjs';
+import { IconsModule } from '../modules/icons/icons.module';
 
 @Injectable({
   providedIn: 'root'
@@ -36,6 +37,17 @@ export class AbilityService {
         duration: 0,
         effect: '1d6 + dex modifier damage',
         image: 'assets/game-art/Tiny RPG Character Asset Pack v1.03 -Free Soldier&Orc/Arrow(Projectile)/Arrow01(32x32).png'
+      },
+      { 
+        abilityId: 2,
+        name: 'Move',
+        description: '',
+        range: 30,
+        requirements: [],
+        target: 'self',
+        duration: 0,
+        effect: '',
+        image:'assets/game-art/arrow-right.png'
       }
     ] 
     return of(abilities);

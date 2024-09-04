@@ -26,7 +26,7 @@
     </div>
     <div *ngIf="selectionState() === states.CharacterSelected" style=" padding-top: 120px;">
         <div *ngFor="let ability of abilities"> 
-            <button (click)="onAttackButtonClicked()" style="border: 1px black solid; border-radius: 4px; width: fit-content;">
+            <button (click)="onActionButtonClicked(ability)" style="border: 1px black solid; border-radius: 4px; width: fit-content;">
                 {{ability.name}}
                 <img [src]="ability.image">
             </button>
@@ -34,5 +34,8 @@
     </div>
     <div *ngIf="selectionState() === states.AttackSelected" style=" padding-top: 120px;">
         Choose an enemy to attack
+    </div>
+    <div *ngIf="selectionState() === states.MoveSelected" style=" padding-top: 120px;">
+        Choose a square to move to
     </div>
 
