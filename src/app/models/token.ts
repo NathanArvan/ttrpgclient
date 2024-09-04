@@ -7,4 +7,5 @@ export interface Token {
     xPosition: number;
     yPosition: number;
     image: File | null;
+    src: string | null;
 }

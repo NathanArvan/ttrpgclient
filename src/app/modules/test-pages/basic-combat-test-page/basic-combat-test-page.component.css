@@ -1,0 +1,24 @@
+.cell {
+    width: 100px; 
+    height: 100px; 
+    border: 1px rgba(128, 128, 128, 0.213) solid; 
+    margin: 10px;
+}
+
+.red-border {
+    border-color: red;
+    border-width: 10px; 
+    border-style: solid;
+}
+
+.green-border {
+    border-color: green;
+    border-width: 10px; 
+    border-style: solid;
+}
+
+.grey-border {
+    border-color: rgb(155, 155, 155);
+    border-width: 10px; 
+    border-style: solid;
+}

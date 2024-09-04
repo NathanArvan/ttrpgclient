@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { MapService } from '../../../services/map.service';
-import { Map } from '../../../models/map';
+import { Map, MapCell } from '../../../models/map';
 import { TokenService } from '../../../services/token.service';
 import { MapGridComponent } from '../../shared/map-grid/map-grid.component';
 import { Token } from '../../../models/token';
@@ -16,10 +16,19 @@ import { CommonModule } from '@angular/common';
   styleUrl: './basic-combat-test-page.component.css'
 })
 export class BasicCombatTestPageComponent implements OnInit {
-
-  public map: Map | null = null;
+  public map : Map = {
+    length: 5,
+    width: 10,
+    mapId:1,
+    campaignId:1,
+    image: '',
+    tokens: [],
+  }
+  public tokens: Token[] | null = null;
   public abilities: any[] = [];
   public characters: any[] =[];
+  public mapMatrix: MapCell[][] = [];
+  public selectedPosition : {xPosition: number, yPosition: number} | null = null;
   constructor(
     private mapService: MapService,
     private tokenService: TokenService,
@@ -28,20 +37,62 @@ export class BasicCombatTestPageComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.mapService.getTestMap().subscribe(map => {
-      this.map = map;
-        this.tokenService.getTokensWithImages().subscribe(tokens => {
-        if (this.map !== null) {
-          this.map.tokens = tokens;
-        }
-      })
-    })
-    this.abilityService.getAbilities().subscribe(abilities => {
+
+    this.tokenService.getMockTokens().subscribe(tokens => {
+      this.map.tokens = tokens;
+      this.generateMapMatrix();
+    });
+    this.abilityService.getMockAbilities().subscribe(abilities => {
       this.abilities = abilities;
     })
-    this.characterService.getCharacters().subscribe(characters => {
-      this.characters = characters;
+    // this.characterService.getCharacters().subscribe(characters => {
+    //   this.characters = characters;
+    // })
+  }
+
+  ngOnChanges(): void {
+    this.generateMapMatrix();
+  }
+
+  generateMapMatrix() {
+    console.log(this.map);
+    if (this.map !== null) {
+      this.mapMatrix = new Array(this.map.length);
+      console.log(this.mapMatrix);
+      for(let i =0; i < this.map.length; i++ ) {
+        this.mapMatrix[i] = new Array(this.map.width);
+        for(let j = 0; j < this.map.width; j++) {
+          this.mapMatrix[i][j] = {token: null, image: null, borderClass: null}
+          if(this.selectedPosition?.xPosition === i && this.selectedPosition.yPosition === j) {
+            this.mapMatrix[i][j].borderClass = 'green-border';
+          }
+        }
+      }
+      this.map.tokens.forEach(token => {  
+        this.mapMatrix[token.xPosition][token.yPosition].token = token; 
+        if (token.src) {
+          this.mapMatrix[token.xPosition][token.yPosition].image = token.src;
+        }
+      })
+      console.log(this.mapMatrix);
+    }
+  }
+
+  onCellClicked(xPosition : number, yPosition: number) {
+    this.selectedPosition = {xPosition, yPosition};
+    var tokenAtPosition = this.map?.tokens.find(token => {
+      return token.xPosition === xPosition && token.yPosition === yPosition
     })
+    // if (tokenAtPosition && tokenAtPosition !== undefined) {
+    //   this.selectedToken = tokenAtPosition;
+    // }
+    // if(this.selectedToken && (
+    //   this.selectedToken.xPosition !== this.selectedPosition.xPosition || this.selectedToken.yPosition !== this.selectedToken.yPosition
+    //   )) {
+    //     this.showMoveMessage = true;
+    //     this.moveMessage = `Move token from ${this.selectedToken.xPosition}, ${this.selectedToken.yPosition} to ${this.selectedPosition.xPosition}, ${this.selectedPosition.yPosition}?` 
+    // }
+    this.generateMapMatrix();
   }
   
   onTokenUpdate(event: Token) {

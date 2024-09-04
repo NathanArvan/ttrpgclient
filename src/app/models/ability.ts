@@ -7,6 +7,7 @@ export interface Ability {
     range: number;
     duration: number;
     requirements: any;
+    image: string | null;
 }
 
 export interface CreateAbilityDTO {

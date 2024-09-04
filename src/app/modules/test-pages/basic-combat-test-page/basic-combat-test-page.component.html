@@ -1,16 +1,35 @@
-<div style="position: relative; z-index: 1;" class="map-container">
-    <div style="position: relative;z-index: 2;">
-        <app-map-grid  [map]="map" (tokenPositionChanged)="onTokenUpdate($event)"></app-map-grid>
-    </div>
-    <img src="assets/game-art/Fantasy Arena.jpg" 
-    style="
-    position: absolute; 
-    width: 1300px; 
-    height: 700px;
-    top: 0px;
-    opacity: .5;
-    "/>
 
-</div>
-<br>
-<div *ngFor="let ability of abilities"> {{ability.name}}</div>
+    <div style="position: relative; z-index: 1;" class="map-container">
+        <div style="position: relative;z-index: 2;">
+            <div *ngFor="let row of mapMatrix; let xIndex = index" style="display: flex; flex-direction: row;">
+                <div *ngFor="let cell of row; let yIndex = index" style="display: flex; flex-direction: column;">
+                    <span (click)="onCellClicked(xIndex, yIndex)" [ngClass]="cell.borderClass" class="cell">
+                        <span *ngIf="cell?.token else noToken">
+                            <img style="width: 100px; height: 100px;" [src]="cell?.image">
+                        </span>
+                        <ng-template #noToken>
+                            <span>&nbsp;</span>
+                        </ng-template>
+                    </span>
+                </div>
+            </div>
+        </div>
+        <img src="assets/game-art/Fantasy Arena.jpg" 
+        style="
+        position: absolute; 
+        width: 1300px; 
+        height: 700px;
+        top: 0px;
+        opacity: .5;
+        "/>
+    
+    </div>
+    <div style="position: relative; bottom: -700px; z-index: 3; padding: 4px;">
+        <div *ngFor="let ability of abilities"> 
+            <button style="border: 1px black solid; border-radius: 4px; width: fit-content;">
+                {{ability.name}}
+                <img [src]="ability.image">
+            </button>
+        </div>
+    </div>
+
