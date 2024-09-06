@@ -1,4 +1,4 @@
-import { Component, computed, OnInit, signal } from '@angular/core';
+import { Component, computed, input, OnInit, signal } from '@angular/core';
 import { MapService } from '../../../services/map.service';
 import { Map, MapCell } from '../../../models/map';
 import { TokenService } from '../../../services/token.service';
@@ -8,6 +8,8 @@ import { AbilityService } from '../../../services/ability.service';
 import { CharacterService } from '../../../services/character.service';
 import { CommonModule } from '@angular/common';
 import { Ability } from '../../../models/ability';
+import { BattleService } from '../../../services/battle.service';
+import { Battle } from '../../../models/battle';
 
 export enum SelectionStates {
   'NothingSelected',
@@ -26,6 +28,11 @@ export enum SelectionStates {
 })
 export class BasicCombatTestPageComponent implements OnInit {
   public states = SelectionStates;
+
+  public currentBattle = signal<Battle | null>(null)
+  public battleLoaded = computed(() => this.currentBattle() !== null)
+  public battleId = input<string | null>(null);
+
   public map : Map = {
     length: 5,
     width: 10,
@@ -46,7 +53,8 @@ export class BasicCombatTestPageComponent implements OnInit {
     private mapService: MapService,
     private tokenService: TokenService,
     private abilityService: AbilityService,
-    private characterService: CharacterService
+    private characterService: CharacterService,
+    private battleService: BattleService
   ) {}
 
   ngOnInit(): void {
@@ -63,8 +71,27 @@ export class BasicCombatTestPageComponent implements OnInit {
     // })
   }
 
-  ngOnChanges(): void {
-    this.generateMapMatrix();
+  createNewBattle() {
+    this.battleService.createBattle().subscribe(battle => {
+      this.currentBattle.set(battle);
+    })
+  }
+
+  loadExistingBattle() {
+    const battleIdInput = this.battleId();
+    if (battleIdInput !== null) {
+      this.battleService.getBattle(parseInt(battleIdInput)).subscribe(battle => {
+        this.currentBattle.set(battle);
+        this.characterService.getCharacters(); //need to update after adding parameters on backend
+      })
+    }
+    else {
+      console.log("bad Id");
+    }
+  }
+
+  updateBattle() {
+
   }
 
   generateMapMatrix() {

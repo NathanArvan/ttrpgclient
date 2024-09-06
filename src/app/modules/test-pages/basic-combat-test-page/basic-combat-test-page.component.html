@@ -1,4 +1,11 @@
-
+<div *ngIf="battleLoaded() === false">
+    <div>
+        <button>Create New Battle</button>
+        <span>Load Existing Battle</span>
+        <input/>
+        <button></button>
+    </div>
+</div>
     <div style="position: relative; z-index: 1;" class="map-container">
         <div style="position: relative;z-index: 2;">
             <div *ngFor="let row of mapMatrix; let xIndex = index" style="display: flex; flex-direction: row;">
