@@ -10,6 +10,7 @@ import { CommonModule } from '@angular/common';
 import { Ability } from '../../../models/ability';
 import { BattleService } from '../../../services/battle.service';
 import { Battle } from '../../../models/battle';
+import { Character } from '../../../models/character';
 
 export enum SelectionStates {
   'NothingSelected',
@@ -17,6 +18,14 @@ export enum SelectionStates {
   'AttackSelected',
   'MoveSelected',
   'EnemySelected'
+}
+
+export const TestCharacter : Partial<Character> = {
+  name: 'Test Character',
+}
+
+export const TestEnemy: Partial<Character> = {
+  name: 'Test Enemy'
 }
 
 @Component({
@@ -32,6 +41,8 @@ export class BasicCombatTestPageComponent implements OnInit {
   public currentBattle = signal<Battle | null>(null)
   public battleLoaded = computed(() => this.currentBattle() !== null)
   public battleId = input<string | null>(null);
+  
+  public characters = signal<Character[] | null>(null);
 
   public map : Map = {
     length: 5,
@@ -43,7 +54,6 @@ export class BasicCombatTestPageComponent implements OnInit {
   }
   public tokens: Token[] | null = null;
   public abilities: any[] = [];
-  public characters: any[] =[];
   public mapMatrix: MapCell[][] = [];
   public selectedPosition = signal<{xPosition: number, yPosition: number} | null>(null);
   public characterIsSelected = computed(() => this.selectedPosition()?.xPosition === 1 && this.selectedPosition()?.yPosition === 1 );
@@ -75,6 +85,7 @@ export class BasicCombatTestPageComponent implements OnInit {
     this.battleService.createBattle().subscribe(battle => {
       this.currentBattle.set(battle);
     })
+    this.characterService.
   }
 
   loadExistingBattle() {
@@ -82,7 +93,9 @@ export class BasicCombatTestPageComponent implements OnInit {
     if (battleIdInput !== null) {
       this.battleService.getBattle(parseInt(battleIdInput)).subscribe(battle => {
         this.currentBattle.set(battle);
-        this.characterService.getCharacters(); //need to update after adding parameters on backend
+        this.characterService.getCharactersByBattleId(battle.battleId).subscribe(characters => {
+          this.characters.set(characters);
+        })
       })
     }
     else {
