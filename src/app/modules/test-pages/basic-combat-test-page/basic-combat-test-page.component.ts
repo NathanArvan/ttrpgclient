@@ -80,6 +80,9 @@ export class BasicCombatTestPageComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    this.abilityService.getMockAbilities().subscribe(abilities => {
+      this.abilities = abilities;
+    })
   }
 
   createNewBattle() {
@@ -150,6 +153,11 @@ export class BasicCombatTestPageComponent implements OnInit {
 
   onCellClicked(xPosition : number, yPosition: number) {
     this.selectedPosition.set({xPosition, yPosition});
+    switch(this.selectionState()) {
+      case SelectionStates.MoveSelected: {
+        this.moveCharacterToSquare(xPosition, yPosition);
+      }
+    }
     this.generateMapMatrix();
   }
   
@@ -167,7 +175,19 @@ export class BasicCombatTestPageComponent implements OnInit {
 
   }
 
-  moveCharacterToSquare() {
-
+  moveCharacterToSquare(xPosition : number, yPosition: number) {
+    let currentCharacters = this.characters();
+    const characterIndex = currentCharacters.findIndex(ch => ch.name === "Test Character");
+    let character = currentCharacters[characterIndex];
+    if (character === undefined) {
+      throw Error("No Character found");
+    }
+    character.xPosition = xPosition;
+    character.yPosition = yPosition;
+    this.characterService.updateCharacter(character.characterId, character).subscribe(updatedCharacter => {
+      currentCharacters[characterIndex] = updatedCharacter;
+      this.characters.set(currentCharacters);
+      this.generateMapMatrix();
+    })
   }
 }
