@@ -1,11 +1,12 @@
 <div *ngIf="battleLoaded() === false">
     <div>
-        <button>Create New Battle</button>
+        <button (click)="createNewBattle()">Create New Battle</button>
         <span>Load Existing Battle</span>
         <input/>
         <button></button>
     </div>
 </div>
+<div *ngIf="battleLoaded() ===true">
     <div style="position: relative; z-index: 1;" class="map-container">
         <div style="position: relative;z-index: 2;">
             <div *ngFor="let row of mapMatrix; let xIndex = index" style="display: flex; flex-direction: row;">
@@ -29,7 +30,6 @@
         top: 0px;
         opacity: .5;
         "/>
-    
     </div>
     <div *ngIf="selectionState() === states.CharacterSelected" style=" padding-top: 120px;">
         <div *ngFor="let ability of abilities"> 
@@ -45,4 +45,4 @@
     <div *ngIf="selectionState() === states.MoveSelected" style=" padding-top: 120px;">
         Choose a square to move to
     </div>
-
+</div>

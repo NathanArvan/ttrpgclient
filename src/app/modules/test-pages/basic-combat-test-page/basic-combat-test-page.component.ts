@@ -11,6 +11,7 @@ import { Ability } from '../../../models/ability';
 import { BattleService } from '../../../services/battle.service';
 import { Battle } from '../../../models/battle';
 import { Character } from '../../../models/character';
+import { combineLatest, forkJoin, map, Observable, switchMap, tap } from 'rxjs';
 
 export enum SelectionStates {
   'NothingSelected',
@@ -20,11 +21,11 @@ export enum SelectionStates {
   'EnemySelected'
 }
 
-export const TestCharacter : Partial<Character> = {
+export let TestCharacter : Partial<Character> = {
   name: 'Test Character',
 }
 
-export const TestEnemy: Partial<Character> = {
+export let TestEnemy: Partial<Character> = {
   name: 'Test Enemy'
 }
 
@@ -42,7 +43,7 @@ export class BasicCombatTestPageComponent implements OnInit {
   public battleLoaded = computed(() => this.currentBattle() !== null)
   public battleId = input<string | null>(null);
   
-  public characters = signal<Character[] | null>(null);
+  public characters = signal<Character[]>([]);
 
   public map : Map = {
     length: 5,
@@ -82,10 +83,32 @@ export class BasicCombatTestPageComponent implements OnInit {
   }
 
   createNewBattle() {
-    this.battleService.createBattle().subscribe(battle => {
-      this.currentBattle.set(battle);
+    // this.battleService.createBattle().subscribe(battle => {
+    //   this.currentBattle.set(battle);
+    //   TestCharacter.battleId = battle.battleId;
+    //   TestEnemy.battleId = battle.battleId;
+    //   this.characterService.createCharacter(TestCharacter).subscribe(character =>{
+    //     this.characters.set([...this.characters(), character]);
+    //   });
+    //   this.characterService.createCharacter(TestEnemy).subscribe(enemy => {
+    //     this.characters.set([...this.characters(), enemy]);
+    //   });
+    // }) 
+
+    this.battleService.createBattle().pipe(
+      switchMap(battle => {
+        this.currentBattle.set(battle);
+        TestCharacter.battleId = battle.battleId;
+        TestEnemy.battleId = battle.battleId;
+        const characterObservable = this.characterService.createCharacter(TestCharacter);
+        const enemyObservable = this.characterService.createCharacter(TestEnemy);
+        return forkJoin({characterObservable, enemyObservable})
+      }),    
+    ).subscribe({
+      next: result => {
+        this.characters.set([...this.characters(), result.characterObservable, result.enemyObservable])
+      }
     })
-    this.characterService.
   }
 
   loadExistingBattle() {
