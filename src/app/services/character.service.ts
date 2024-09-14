@@ -16,7 +16,7 @@ export class CharacterService {
   }
 
   public getCharactersByBattleId(battleId: number) {
-    return this.client.get<any[]>(`${this.baseURL}/characters&battleids=${[battleId]}`)
+    return this.client.get<any[]>(`${this.baseURL}/characters`, {params: {battleIds: [battleId]}})
   }
 
   public createCharacter(payload: Partial<Character>) {

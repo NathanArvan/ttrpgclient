@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { RouterModule, Routes } from '@angular/router';
 import { BasicCombatTestPageComponent } from './basic-combat-test-page/basic-combat-test-page.component';
 import { PhaserTestPageComponent } from './phaser-test-page/phaser-test-page.component';
+import { ReactiveFormsModule } from '@angular/forms';
 
 const routes : Routes = [
   {
@@ -19,7 +20,8 @@ const routes : Routes = [
   declarations: [],
   imports: [
     RouterModule.forChild(routes),
-    CommonModule
+    CommonModule,
+    ReactiveFormsModule
   ],
   exports: [
     RouterModule

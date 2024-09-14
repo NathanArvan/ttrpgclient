@@ -11,7 +11,8 @@ import { Ability } from '../../../models/ability';
 import { BattleService } from '../../../services/battle.service';
 import { Battle } from '../../../models/battle';
 import { Character } from '../../../models/character';
-import { combineLatest, forkJoin, map, Observable, switchMap, tap } from 'rxjs';
+import { forkJoin, switchMap } from 'rxjs';
+import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 
 export enum SelectionStates {
   'NothingSelected',
@@ -23,25 +24,35 @@ export enum SelectionStates {
 
 export let TestCharacter : Partial<Character> = {
   name: 'Test Character',
+  xPosition: 1,
+  yPosition: 1,
+  image: 'assets/game-art/Tiny RPG Character Asset Pack v1.03 -Free Soldier&Orc/Characters(100x100)/Soldier/Soldier/Soldier-Idle Resize.png'
 }
 
 export let TestEnemy: Partial<Character> = {
-  name: 'Test Enemy'
+  name: 'Test Enemy',
+  xPosition: 4,
+  yPosition: 4,
+  image: 'assets/game-art/Tiny RPG Character Asset Pack v1.03 -Free Soldier&Orc/Characters(100x100)/Orc/Orc/Orc-Idle-Resize.png'
 }
 
 @Component({
   selector: 'app-basic-combat-test-page',
   standalone: true,
-  imports: [MapGridComponent, CommonModule],
+  imports: [MapGridComponent, CommonModule, ReactiveFormsModule],
   templateUrl: './basic-combat-test-page.component.html',
   styleUrl: './basic-combat-test-page.component.css'
 })
 export class BasicCombatTestPageComponent implements OnInit {
   public states = SelectionStates;
 
+  public existingBattleForm: FormGroup = new FormGroup(
+    {battleId: new FormControl()}
+  )
+  
   public currentBattle = signal<Battle | null>(null)
   public battleLoaded = computed(() => this.currentBattle() !== null)
-  public battleId = input<string | null>(null);
+  //public battleId = input<string | null>(null);
   
   public characters = signal<Character[]>([]);
 
@@ -53,7 +64,7 @@ export class BasicCombatTestPageComponent implements OnInit {
     image: '',
     tokens: [],
   }
-  public tokens: Token[] | null = null;
+  //public tokens: Token[] | null = null;
   public abilities: any[] = [];
   public mapMatrix: MapCell[][] = [];
   public selectedPosition = signal<{xPosition: number, yPosition: number} | null>(null);
@@ -69,32 +80,9 @@ export class BasicCombatTestPageComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-
-    this.tokenService.getMockTokens().subscribe(tokens => {
-      this.map.tokens = tokens;
-      this.generateMapMatrix();
-    });
-    this.abilityService.getMockAbilities().subscribe(abilities => {
-      this.abilities = abilities;
-    })
-    // this.characterService.getCharacters().subscribe(characters => {
-    //   this.characters = characters;
-    // })
   }
 
   createNewBattle() {
-    // this.battleService.createBattle().subscribe(battle => {
-    //   this.currentBattle.set(battle);
-    //   TestCharacter.battleId = battle.battleId;
-    //   TestEnemy.battleId = battle.battleId;
-    //   this.characterService.createCharacter(TestCharacter).subscribe(character =>{
-    //     this.characters.set([...this.characters(), character]);
-    //   });
-    //   this.characterService.createCharacter(TestEnemy).subscribe(enemy => {
-    //     this.characters.set([...this.characters(), enemy]);
-    //   });
-    // }) 
-
     this.battleService.createBattle().pipe(
       switchMap(battle => {
         this.currentBattle.set(battle);
@@ -107,17 +95,19 @@ export class BasicCombatTestPageComponent implements OnInit {
     ).subscribe({
       next: result => {
         this.characters.set([...this.characters(), result.characterObservable, result.enemyObservable])
+        this.generateMapMatrix();
       }
     })
   }
 
   loadExistingBattle() {
-    const battleIdInput = this.battleId();
+    const battleIdInput = this.existingBattleForm.controls['battleId'].value;
     if (battleIdInput !== null) {
       this.battleService.getBattle(parseInt(battleIdInput)).subscribe(battle => {
         this.currentBattle.set(battle);
         this.characterService.getCharactersByBattleId(battle.battleId).subscribe(characters => {
           this.characters.set(characters);
+          this.generateMapMatrix();
         })
       })
     }
@@ -152,29 +142,14 @@ export class BasicCombatTestPageComponent implements OnInit {
           }
         }
       }
-      this.map.tokens.forEach(token => {  
-        this.mapMatrix[token.xPosition][token.yPosition].token = token; 
-        if (token.src) {
-          this.mapMatrix[token.xPosition][token.yPosition].image = token.src;
-        }
+      this.characters().forEach(character => {  
+        this.mapMatrix[character.xPosition][character.yPosition].image = character.image;
       })
     }
   }
 
   onCellClicked(xPosition : number, yPosition: number) {
     this.selectedPosition.set({xPosition, yPosition});
-    // var tokenAtPosition = this.map?.tokens.find(token => {
-    //   return token.xPosition === xPosition && token.yPosition === yPosition
-    // })
-    // if (tokenAtPosition && tokenAtPosition !== undefined) {
-    //   this.selectedToken = tokenAtPosition;
-    // }
-    // if(this.selectedToken && (
-    //   this.selectedToken.xPosition !== this.selectedPosition.xPosition || this.selectedToken.yPosition !== this.selectedToken.yPosition
-    //   )) {
-    //     this.showMoveMessage = true;
-    //     this.moveMessage = `Move token from ${this.selectedToken.xPosition}, ${this.selectedToken.yPosition} to ${this.selectedPosition.xPosition}, ${this.selectedPosition.yPosition}?` 
-    // }
     this.generateMapMatrix();
   }
   

@@ -1,9 +1,11 @@
 <div *ngIf="battleLoaded() === false">
     <div>
         <button (click)="createNewBattle()">Create New Battle</button>
-        <span>Load Existing Battle</span>
-        <input/>
-        <button></button>
+        <form [formGroup]="existingBattleForm">
+            <span>Load Existing Battle</span>
+            <input formControlName="battleId" />
+            <button (click)="loadExistingBattle()">Enter</button>
+        </form>
     </div>
 </div>
 <div *ngIf="battleLoaded() ===true">
@@ -12,7 +14,7 @@
             <div *ngFor="let row of mapMatrix; let xIndex = index" style="display: flex; flex-direction: row;">
                 <div *ngFor="let cell of row; let yIndex = index" style="display: flex; flex-direction: column;">
                     <span (click)="onCellClicked(xIndex, yIndex)" [ngClass]="cell.borderClass" class="cell">
-                        <span *ngIf="cell?.token else noToken">
+                        <span *ngIf="cell?.image else noToken">
                             <img [src]="cell?.image">
                         </span>
                         <ng-template #noToken>

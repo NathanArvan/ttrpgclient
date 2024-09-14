@@ -19,4 +19,7 @@ export interface Character {
     actions: number;
     accuracy:number;
     evasion: number;
+    xPosition: number;
+    yPosition: number;
+    image: string;
 }
