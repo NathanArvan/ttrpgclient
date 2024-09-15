@@ -52,9 +52,53 @@ export class BasicCombatTestPageComponent implements OnInit {
   
   public currentBattle = signal<Battle | null>(null)
   public battleLoaded = computed(() => this.currentBattle() !== null)
-  //public battleId = input<string | null>(null);
-  
+
   public characters = signal<Character[]>([]);
+  public characterPosition = computed<{xPosition: number, yPosition: number} | null>(() => {
+    const character = this.characters().find(pc => pc.name === "Test Character");
+    if (character === undefined) {
+      return null;
+    }
+    return {xPosition: character.xPosition, yPosition: character.yPosition}
+  });
+  public enemyPosition = computed<{xPosition: number, yPosition: number} | null>(() => {
+    const character = this.characters().find(pc => pc.name === "Test Enemy");
+    if (character === undefined) {
+      return null;
+    }
+    return {xPosition: character.xPosition, yPosition: character.yPosition}
+  });
+
+  public selectedPosition = signal<{xPosition: number, yPosition: number} | null>(null);
+  public characterIsSelected = computed(() => {
+    this.selectedPosition()?.xPosition === this.characterPosition()?.xPosition && this.selectedPosition()?.yPosition === this.characterPosition()?.yPosition
+  });
+
+  public selectionState = signal<SelectionStates>(SelectionStates.NothingSelected);
+
+  public mapMatrix = computed<MapCell[][]>(() => {
+    const selectedXPosition = this.selectedPosition()?.xPosition;
+    const selectedYPosition = this.selectedPosition()?.yPosition;
+    const characterXPosition = this.characterPosition()?.xPosition;
+    const characterYPosition = this.characterPosition()?.xPosition;
+    let mapMatrix = new Array(this.map.length);
+    for(let i =0; i < this.map.length; i++ ) {
+      mapMatrix[i] = new Array(this.map.width);
+      for(let j = 0; j < this.map.width; j++) {
+        mapMatrix[i][j] = {token: null, image: null, borderClass: null}
+        if(selectedXPosition === i && selectedYPosition === j) {
+          mapMatrix[i][j].borderClass = 'green-border';
+        }
+        if(selectedXPosition === characterXPosition && selectedYPosition === characterYPosition && selectedXPosition === i && selectedYPosition === j) {
+          mapMatrix[i][j].borderClass = 'red-border';
+        }
+      }
+    }
+    this.characters().forEach(character => {  
+      mapMatrix[character.xPosition][character.yPosition].image = character.image;
+    })
+    return mapMatrix;
+  }); 
 
   public map : Map = {
     length: 5,
@@ -64,13 +108,10 @@ export class BasicCombatTestPageComponent implements OnInit {
     image: '',
     tokens: [],
   }
-  //public tokens: Token[] | null = null;
+  
   public abilities: any[] = [];
-  public mapMatrix: MapCell[][] = [];
-  public selectedPosition = signal<{xPosition: number, yPosition: number} | null>(null);
-  public characterIsSelected = computed(() => this.selectedPosition()?.xPosition === 1 && this.selectedPosition()?.yPosition === 1 );
-  public selectionState = signal<SelectionStates>(SelectionStates.NothingSelected);
-  public characterPosition = signal<{xPosition: number, yPosition: number}>({xPosition:1, yPosition:1});
+  // public mapMatrix: MapCell[][] = [];
+
   constructor(
     private mapService: MapService,
     private tokenService: TokenService,
@@ -98,7 +139,7 @@ export class BasicCombatTestPageComponent implements OnInit {
     ).subscribe({
       next: result => {
         this.characters.set([...this.characters(), result.characterObservable, result.enemyObservable])
-        this.generateMapMatrix();
+        //this.generateMapMatrix();
       }
     })
   }
@@ -110,7 +151,7 @@ export class BasicCombatTestPageComponent implements OnInit {
         this.currentBattle.set(battle);
         this.characterService.getCharactersByBattleId(battle.battleId).subscribe(characters => {
           this.characters.set(characters);
-          this.generateMapMatrix();
+          //this.generateMapMatrix();
         })
       })
     }
@@ -123,33 +164,37 @@ export class BasicCombatTestPageComponent implements OnInit {
 
   }
 
-  generateMapMatrix() {
-    const selectedXPosition = this.selectedPosition()?.xPosition;
-    const selectedYPosition = this.selectedPosition()?.yPosition;
-    if (this.map !== null) {
-      this.mapMatrix = new Array(this.map.length);
-      for(let i =0; i < this.map.length; i++ ) {
-        this.mapMatrix[i] = new Array(this.map.width);
-        for(let j = 0; j < this.map.width; j++) {
-          this.mapMatrix[i][j] = {token: null, image: null, borderClass: null}
-          if(selectedXPosition === i && selectedYPosition === j) {
-            this.mapMatrix[i][j].borderClass = 'green-border';
-          }
-          if(selectedXPosition === 1 && selectedYPosition === 1 && selectedXPosition === i && selectedYPosition === j) {
-            this.mapMatrix[i][j].borderClass = 'red-border';
-            this.selectionState.set(SelectionStates.CharacterSelected);
-          }
-          if(selectedXPosition === 4 && selectedYPosition === 4 && this.selectionState() === SelectionStates.AttackSelected ) {
-            console.log("Orc attacked")
-            this.selectionState.set(SelectionStates.NothingSelected);
-          }
-        }
-      }
-      this.characters().forEach(character => {  
-        this.mapMatrix[character.xPosition][character.yPosition].image = character.image;
-      })
-    }
-  }
+  // generateMapMatrix() {
+  //   const selectedXPosition = this.selectedPosition()?.xPosition;
+  //   const selectedYPosition = this.selectedPosition()?.yPosition;
+  //   const characterXPosition = this.characterPosition()?.xPosition;
+  //   const characterYPosition = this.characterPosition()?.xPosition;
+  //   const enemyXPosition = this.enemyPosition()?.xPosition;
+  //   const enemyYPosition = this.enemyPosition()?.xPosition;
+  //   if (this.map !== null) {
+  //     this.mapMatrix = new Array(this.map.length);
+  //     for(let i =0; i < this.map.length; i++ ) {
+  //       this.mapMatrix[i] = new Array(this.map.width);
+  //       for(let j = 0; j < this.map.width; j++) {
+  //         this.mapMatrix[i][j] = {token: null, image: null, borderClass: null}
+  //         if(selectedXPosition === i && selectedYPosition === j) {
+  //           this.mapMatrix[i][j].borderClass = 'green-border';
+  //         }
+  //         if(selectedXPosition === characterXPosition && selectedYPosition === characterYPosition && selectedXPosition === i && selectedYPosition === j) {
+  //           this.mapMatrix[i][j].borderClass = 'red-border';
+  //           this.selectionState.set(SelectionStates.CharacterSelected);
+  //         }
+  //         if(selectedXPosition === enemyXPosition && selectedYPosition === enemyYPosition && this.selectionState() === SelectionStates.AttackSelected ) {
+  //           console.log("Orc attacked")
+  //           this.selectionState.set(SelectionStates.NothingSelected);
+  //         }
+  //       }
+  //     }
+  //     this.characters().forEach(character => {  
+  //       this.mapMatrix[character.xPosition][character.yPosition].image = character.image;
+  //     })
+  //   }
+  // }
 
   onCellClicked(xPosition : number, yPosition: number) {
     this.selectedPosition.set({xPosition, yPosition});
@@ -158,7 +203,7 @@ export class BasicCombatTestPageComponent implements OnInit {
         this.moveCharacterToSquare(xPosition, yPosition);
       }
     }
-    this.generateMapMatrix();
+    //this.generateMapMatrix();
   }
   
   onTokenUpdate(event: Token) {
@@ -187,7 +232,7 @@ export class BasicCombatTestPageComponent implements OnInit {
     this.characterService.updateCharacter(character.characterId, character).subscribe(updatedCharacter => {
       currentCharacters[characterIndex] = updatedCharacter;
       this.characters.set(currentCharacters);
-      this.generateMapMatrix();
+      //this.generateMapMatrix();
     })
   }
 }
