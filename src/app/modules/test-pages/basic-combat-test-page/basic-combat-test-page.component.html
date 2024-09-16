@@ -9,29 +9,36 @@
     </div>
 </div>
 <div *ngIf="battleLoaded() ===true">
-    <div style="position: relative; z-index: 1;" class="map-container">
-        <div style="position: relative;z-index: 2;">
-            <div *ngFor="let row of mapMatrix(); let xIndex = index" style="display: flex; flex-direction: row;">
-                <div *ngFor="let cell of row; let yIndex = index" style="display: flex; flex-direction: column;">
-                    <span (click)="onCellClicked(xIndex, yIndex)" [ngClass]="cell.borderClass" class="cell">
-                        <span *ngIf="cell?.image else noToken">
-                            <img [src]="cell?.image">
+    <div style="display: flex;">
+        <div style="position: relative; z-index: 1;" class="map-container">
+            <div style="position: relative;z-index: 2;">
+                <div *ngFor="let row of mapMatrix(); let xIndex = index" style="display: flex; flex-direction: row;">
+                    <div *ngFor="let cell of row; let yIndex = index" style="display: flex; flex-direction: column;">
+                        <span (click)="onCellClicked(xIndex, yIndex)" [ngClass]="cell.borderClass" class="cell">
+                            <span *ngIf="cell?.image else noToken">
+                                <img [src]="cell?.image">
+                            </span>
+                            <ng-template #noToken>
+                                <span>&nbsp;</span>
+                            </ng-template>
                         </span>
-                        <ng-template #noToken>
-                            <span>&nbsp;</span>
-                        </ng-template>
-                    </span>
+                    </div>
                 </div>
             </div>
+            <img src="assets/game-art/Fantasy Arena.jpg" 
+            style="
+            position: absolute; 
+            width: 1300px; 
+            height: 700px;
+            top: 0px;
+            opacity: .5;
+            "/>
         </div>
-        <img src="assets/game-art/Fantasy Arena.jpg" 
-        style="
-        position: absolute; 
-        width: 1300px; 
-        height: 700px;
-        top: 0px;
-        opacity: .5;
-        "/>
+        <div style="border: solid 1px; border-radius: 4px; margin-left: 200px;">
+            <h5>Stats</h5>
+            <div>Character Position: {{characterPosition()?.xPosition}}, {{characterPosition()?.yPosition}}</div>
+            <div>Enemy Health: {{enemy()?.hitPoints}}</div>
+        </div>
     </div>
     <div *ngIf="selectionState() === states.CharacterSelected" style=" padding-top: 120px;">
         <div *ngFor="let ability of abilities"> 

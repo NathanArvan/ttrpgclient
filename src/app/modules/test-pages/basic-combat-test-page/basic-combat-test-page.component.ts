@@ -61,13 +61,21 @@ export class BasicCombatTestPageComponent implements OnInit {
     }
     return {xPosition: character.xPosition, yPosition: character.yPosition}
   });
-  public enemyPosition = computed<{xPosition: number, yPosition: number} | null>(() => {
+  public enemy = computed<Character | null>(() => {
     const character = this.characters().find(pc => pc.name === "Test Enemy");
     if (character === undefined) {
       return null;
     }
-    return {xPosition: character.xPosition, yPosition: character.yPosition}
+    return character;
   });
+  public enemyPosition = computed<{xPosition: number, yPosition: number} | null>(() => {
+    const character = this.enemy();
+    if (character !== null) {
+      return {xPosition: character?.xPosition, yPosition: character?.yPosition}
+    }
+    return null;
+  });
+
 
   public selectedPosition = signal<{xPosition: number, yPosition: number} | null>(null);
   public characterIsSelected = computed(() => {
@@ -175,9 +183,15 @@ export class BasicCombatTestPageComponent implements OnInit {
     switch(this.selectionState()) {
       case SelectionStates.MoveSelected: {
         this.moveCharacterToSquare(xPosition, yPosition);
+        break;
+      }
+      case SelectionStates.AttackSelected: {
+        if (this.enemyPosition()?.xPosition === xPosition && this.enemyPosition()?.yPosition && yPosition) {
+          this.attackEnemy();
+        }
+        break;
       }
     }
-    //this.generateMapMatrix();
   }
   
   onTokenUpdate(event: Token) {
@@ -203,6 +217,21 @@ export class BasicCombatTestPageComponent implements OnInit {
     }
     character.xPosition = xPosition;
     character.yPosition = yPosition;
+    this.characterService.updateCharacter(character.characterId, character).subscribe(updatedCharacter => {
+      currentCharacters[characterIndex] = updatedCharacter;
+      this.characters.set([...currentCharacters]);
+      this.selectionState.set(SelectionStates.NothingSelected);
+    })
+  }
+
+  attackEnemy() {
+    let currentCharacters = this.characters();
+    const characterIndex = currentCharacters.findIndex(ch => ch.name === "Test Enemy");
+    let character = currentCharacters[characterIndex];
+    if (character === undefined) {
+      throw Error("No Character found");
+    }
+    character.hitPoints = character.hitPoints - 5;
     this.characterService.updateCharacter(character.characterId, character).subscribe(updatedCharacter => {
       currentCharacters[characterIndex] = updatedCharacter;
       this.characters.set([...currentCharacters]);
