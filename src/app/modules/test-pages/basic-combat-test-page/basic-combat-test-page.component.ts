@@ -164,40 +164,14 @@ export class BasicCombatTestPageComponent implements OnInit {
 
   }
 
-  // generateMapMatrix() {
-  //   const selectedXPosition = this.selectedPosition()?.xPosition;
-  //   const selectedYPosition = this.selectedPosition()?.yPosition;
-  //   const characterXPosition = this.characterPosition()?.xPosition;
-  //   const characterYPosition = this.characterPosition()?.xPosition;
-  //   const enemyXPosition = this.enemyPosition()?.xPosition;
-  //   const enemyYPosition = this.enemyPosition()?.xPosition;
-  //   if (this.map !== null) {
-  //     this.mapMatrix = new Array(this.map.length);
-  //     for(let i =0; i < this.map.length; i++ ) {
-  //       this.mapMatrix[i] = new Array(this.map.width);
-  //       for(let j = 0; j < this.map.width; j++) {
-  //         this.mapMatrix[i][j] = {token: null, image: null, borderClass: null}
-  //         if(selectedXPosition === i && selectedYPosition === j) {
-  //           this.mapMatrix[i][j].borderClass = 'green-border';
-  //         }
-  //         if(selectedXPosition === characterXPosition && selectedYPosition === characterYPosition && selectedXPosition === i && selectedYPosition === j) {
-  //           this.mapMatrix[i][j].borderClass = 'red-border';
-  //           this.selectionState.set(SelectionStates.CharacterSelected);
-  //         }
-  //         if(selectedXPosition === enemyXPosition && selectedYPosition === enemyYPosition && this.selectionState() === SelectionStates.AttackSelected ) {
-  //           console.log("Orc attacked")
-  //           this.selectionState.set(SelectionStates.NothingSelected);
-  //         }
-  //       }
-  //     }
-  //     this.characters().forEach(character => {  
-  //       this.mapMatrix[character.xPosition][character.yPosition].image = character.image;
-  //     })
-  //   }
-  // }
 
   onCellClicked(xPosition : number, yPosition: number) {
+    const characterXPosition = this.characterPosition()?.xPosition;
+    const characterYPosition = this.characterPosition()?.yPosition;
     this.selectedPosition.set({xPosition, yPosition});
+    if (xPosition === characterXPosition && yPosition === characterYPosition) {
+      this.selectionState.set(SelectionStates.CharacterSelected);
+    }
     switch(this.selectionState()) {
       case SelectionStates.MoveSelected: {
         this.moveCharacterToSquare(xPosition, yPosition);
@@ -231,8 +205,8 @@ export class BasicCombatTestPageComponent implements OnInit {
     character.yPosition = yPosition;
     this.characterService.updateCharacter(character.characterId, character).subscribe(updatedCharacter => {
       currentCharacters[characterIndex] = updatedCharacter;
-      this.characters.set(currentCharacters);
-      //this.generateMapMatrix();
+      this.characters.set([...currentCharacters]);
+      this.selectionState.set(SelectionStates.NothingSelected);
     })
   }
 }
