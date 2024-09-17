@@ -3,6 +3,7 @@ import { Token } from "./token";
 export interface Character {
     characterId: number;
     battleId: number | null;
+    userId: number | null;
     name: string;
     tokenId: number;
     token: Token | null;
