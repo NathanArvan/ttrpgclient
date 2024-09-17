@@ -1,6 +1,7 @@
 import { Component, computed, signal } from '@angular/core';
 import { User } from '../../../models/user';
 import { Battle } from '../../../models/battle';
+import { Character } from '../../../models/character';
 
 @Component({
   selector: 'app-multiplayer-test-page',
@@ -19,4 +20,6 @@ export class MultiplayerTestPageComponent {
   public battleIsLoaded = computed(() => {
     return this.currentBattle() !== null;
   })
+
+  public characters = signal<Character[]>([]);
 }
