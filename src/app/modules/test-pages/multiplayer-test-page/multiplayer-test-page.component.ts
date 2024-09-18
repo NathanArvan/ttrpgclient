@@ -2,6 +2,7 @@ import { Component, computed, signal } from '@angular/core';
 import { User } from '../../../models/user';
 import { Battle } from '../../../models/battle';
 import { Character } from '../../../models/character';
+import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 
 export enum MultiplayerUIStates {
   UserMenu,
@@ -13,12 +14,13 @@ export enum MultiplayerUIStates {
 @Component({
   selector: 'app-multiplayer-test-page',
   standalone: true,
-  imports: [],
+  imports: [ReactiveFormsModule],
   templateUrl: './multiplayer-test-page.component.html',
   styleUrl: './multiplayer-test-page.component.css'
 })
 export class MultiplayerTestPageComponent {
   public uiState = signal<MultiplayerUIStates>(MultiplayerUIStates.UserMenu);
+  public uiStates = MultiplayerUIStates;
 
   public currentUser = signal<User | null>(null);
   public userIsLoaded = computed(() => {
@@ -42,6 +44,10 @@ export class MultiplayerTestPageComponent {
     }
     return found;
   })
+
+  public existingBattleForm: FormGroup = new FormGroup(
+    {battleId: new FormControl()}
+  )
 
   constructor() {}
 

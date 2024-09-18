@@ -1,1 +1,17 @@
-<p>multiplayer-test-page works!</p>
+<ng-container [@switch]="this.uiState()">
+    <div [@case]="uiStates.UserMenu">
+        <div style="border: 1px solid; border-radius: 4px;">
+            <h5>Create Account or sign In</h5>
+            <div></div>
+        </div>
+    </div>
+    <div [@case]="uiStates.BattleMenu">
+        <button (click)="createBattle()">Create New Battle</button>
+        <form [formGroup]="existingBattleForm">
+            <span>Load Existing Battle</span>
+            <input formControlName="battleId" />
+            <button (click)="loadBattle()">Enter</button>
+        </form>
+    </div>
+
+</ng-container>
