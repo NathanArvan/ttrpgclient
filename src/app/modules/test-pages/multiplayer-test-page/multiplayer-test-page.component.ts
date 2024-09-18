@@ -42,4 +42,20 @@ export class MultiplayerTestPageComponent {
     }
     return found;
   })
+
+  constructor() {}
+
+  createUser() {}
+
+  loadUser() {}
+
+  createBattle() {}
+
+  loadBattle() {}
+
+  getCharacters() {}
+
+  createCharacter() {}
+
+  removeCharacter() {}
 }
