@@ -4,6 +4,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { BasicCombatTestPageComponent } from './basic-combat-test-page/basic-combat-test-page.component';
 import { PhaserTestPageComponent } from './phaser-test-page/phaser-test-page.component';
 import { ReactiveFormsModule } from '@angular/forms';
+import { MultiplayerTestPageComponent } from './multiplayer-test-page/multiplayer-test-page.component';
 
 const routes : Routes = [
   {
@@ -13,6 +14,10 @@ const routes : Routes = [
   {
     path: 'phaserjs-test',
     component: PhaserTestPageComponent
+  },
+  {
+    path: 'multiplayer-test',
+    component: MultiplayerTestPageComponent
   }
 ]
 
