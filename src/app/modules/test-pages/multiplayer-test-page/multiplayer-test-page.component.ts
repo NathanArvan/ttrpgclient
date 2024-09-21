@@ -45,6 +45,15 @@ export class MultiplayerTestPageComponent {
     return found;
   })
 
+  public createUserForm: FormGroup = new FormGroup(
+    {
+      name: new FormControl(),
+      email: new FormControl()
+    }
+  )
+  public loadUserForm: FormGroup = new FormGroup(
+    {email: new FormControl()}
+  )
   public existingBattleForm: FormGroup = new FormGroup(
     {battleId: new FormControl()}
   )
