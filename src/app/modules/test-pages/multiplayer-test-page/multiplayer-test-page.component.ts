@@ -79,6 +79,7 @@ export class MultiplayerTestPageComponent {
     }
     this.userService.createUser(user).subscribe(user => {
       this.currentUser.set(user);
+      this.uiState.set(this.uiStates.BattleMenu);
     })
   }
 
@@ -86,12 +87,14 @@ export class MultiplayerTestPageComponent {
     const email = this.loadUserForm.controls['email'].value;
     this.userService.getUserByEmail(email).subscribe(user => {
       this.currentUser.set(user);
+      this.uiState.set(this.uiStates.BattleMenu);
     })
   }
 
   createBattle() {
     this.battleService.createBattle().subscribe(battle => {
       this.currentBattle.set(battle);
+      this.uiState.set(this.uiStates.CharacterMenu);
     })
   }
 
@@ -100,9 +103,7 @@ export class MultiplayerTestPageComponent {
     if (battleIdInput !== null) {
       this.battleService.getBattle(parseInt(battleIdInput)).subscribe(battle => {
         this.currentBattle.set(battle);
-        this.characterService.getCharactersByBattleId(battle.battleId).subscribe(characters => {
-          this.characters.set(characters);
-        })
+        this.uiState.set(this.uiStates.CharacterMenu);
       })
     }
     else {
