@@ -3,6 +3,9 @@ import { User } from '../../../models/user';
 import { Battle } from '../../../models/battle';
 import { Character } from '../../../models/character';
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { UserService } from '../../../services/user.service';
+import { BattleService } from '../../../services/battle.service';
+import { CharacterService } from '../../../services/character.service';
 
 export enum MultiplayerUIStates {
   UserMenu,
@@ -58,15 +61,51 @@ export class MultiplayerTestPageComponent {
     {battleId: new FormControl()}
   )
 
-  constructor() {}
+  constructor(
+    private userService: UserService,
+    private battleService: BattleService,
+    private characterService: CharacterService
+  ) {}
 
-  createUser() {}
+  createUser() {
+    const user: User = {
+      name : this.createUserForm.controls['name'].value,
+      email : this.createUserForm.controls['email'].value,
+      userId: null,
+      characters : null,
+    }
+    this.userService.createUser(user).subscribe(user => {
+      this.currentUser.set(user);
+    })
+  }
 
-  loadUser() {}
+  loadUser() {
+    const email = this.loadUserForm.controls['email'].value;
+    this.userService.getUserByEmail(email).subscribe(user => {
+      this.currentUser.set(user);
+    })
+  }
 
-  createBattle() {}
+  createBattle() {
+    this.battleService.createBattle().subscribe(battle => {
+      this.currentBattle.set(battle);
+    })
+  }
 
-  loadBattle() {}
+  loadBattle() {
+    const battleIdInput = this.existingBattleForm.controls['battleId'].value;
+    if (battleIdInput !== null) {
+      this.battleService.getBattle(parseInt(battleIdInput)).subscribe(battle => {
+        this.currentBattle.set(battle);
+        this.characterService.getCharactersByBattleId(battle.battleId).subscribe(characters => {
+          this.characters.set(characters);
+        })
+      })
+    }
+    else {
+      console.log("bad Id");
+    }
+  }
 
   getCharacters() {}
 
