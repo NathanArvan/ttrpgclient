@@ -1,8 +1,8 @@
-<ng-container [@switch]="this.uiState()">
-    <div [@case]="uiStates.UserMenu">
+@switch (uiState()) {
+    @case (uiStates.UserMenu) {
         <div style="border: 1px solid; border-radius: 4px;">
             <h5>Create Account or sign In</h5>
-            <div>
+            <div style="display: flex; gap: 8px;">
                 <form [formGroup]="createUserForm">
                     <div>Create Account</div>
                     <div>
@@ -18,32 +18,30 @@
                 <form [formGroup]="loadUserForm">
                     <div>Load Account</div>
                     <div>
-                        <span>email</span>
+                        <span>Email</span>
                         <input formControlName="email" />
                     </div>
                     <button (click)="loadUser()">Enter</button>
                 </form>
             </div>
         </div>
-    </div>
-    <div [@case]="uiStates.BattleMenu">
+    }
+    @case (uiStates.BattleMenu) {
         <button (click)="createBattle()">Create New Battle</button>
         <form [formGroup]="existingBattleForm">
             <span>Load Existing Battle</span>
             <input formControlName="battleId" />
             <button (click)="loadBattle()">Enter</button>
         </form>
-    </div>
-    <div [@case]="uiStates.CharacterMenu">
+    }
+    @case (uiStates.CharacterMenu) {
         <div [@if]="userCharacter() === null">
             Create a character
         </div>
         <div [@if]="userCharacter() !== null">
             Use {{ userCharacter()?.name }} and join the battle?
         </div>
-    </div>
-    <div [@case]="uiStates.Map">
+    }
+    @case (uiStates.Map) {}
+}
 
-    </div>
-
-</ng-container>
