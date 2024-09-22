@@ -6,6 +6,7 @@ import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { UserService } from '../../../services/user.service';
 import { BattleService } from '../../../services/battle.service';
 import { CharacterService } from '../../../services/character.service';
+import { ClassService } from '../../../services/class.service';
 
 export enum MultiplayerUIStates {
   UserMenu,
@@ -48,6 +49,8 @@ export class MultiplayerTestPageComponent {
     return found;
   })
 
+  public classes = signal<any[]>([]);
+
   public createUserForm: FormGroup = new FormGroup(
     {
       name: new FormControl(),
@@ -60,11 +63,11 @@ export class MultiplayerTestPageComponent {
   public existingBattleForm: FormGroup = new FormGroup(
     {battleId: new FormControl()}
   )
-
   constructor(
     private userService: UserService,
     private battleService: BattleService,
-    private characterService: CharacterService
+    private characterService: CharacterService,
+    private classService: ClassService
   ) {}
 
   createUser() {
@@ -112,4 +115,10 @@ export class MultiplayerTestPageComponent {
   createCharacter() {}
 
   removeCharacter() {}
+
+  getClasses() {
+    this.classService.getClasses().subscribe(classes => {
+      this.classes.set(classes);
+    });
+  }
 }

@@ -11,6 +11,6 @@ export class ClassService {
   constructor(private client: HttpClient) { }
 
   public getClasses() {
-    return this.client.get(`${this.baseURL}/classes/`)
+    return this.client.get<any[]>(`${this.baseURL}/classes/`)
   }
 }
