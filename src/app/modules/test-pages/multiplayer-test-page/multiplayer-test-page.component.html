@@ -42,6 +42,8 @@
             Use {{ userCharacter()?.name }} and join the battle?
         </div>
     }
-    @case (uiStates.Map) {}
+    @case (uiStates.Map) {
+        <app-websocket-test [battleId]="currentBattleId()"></app-websocket-test>
+    }
 }
 

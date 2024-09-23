@@ -7,6 +7,7 @@ import { UserService } from '../../../services/user.service';
 import { BattleService } from '../../../services/battle.service';
 import { CharacterService } from '../../../services/character.service';
 import { ClassService } from '../../../services/class.service';
+import { WebsocketTestComponent } from "../websocket-test/websocket-test.component";
 
 export enum MultiplayerUIStates {
   UserMenu,
@@ -18,7 +19,7 @@ export enum MultiplayerUIStates {
 @Component({
   selector: 'app-multiplayer-test-page',
   standalone: true,
-  imports: [ReactiveFormsModule],
+  imports: [ReactiveFormsModule, WebsocketTestComponent],
   templateUrl: './multiplayer-test-page.component.html',
   styleUrl: './multiplayer-test-page.component.css'
 })
@@ -32,6 +33,13 @@ export class MultiplayerTestPageComponent {
   })
 
   public currentBattle = signal<Battle | null>(null);
+  public currentBattleId = computed<number | null>(() => {
+    const battle = this.currentBattle();
+    if (battle === null) {
+      return null;
+    }
+    return battle.battleId;
+  });
   public battleIsLoaded = computed(() => {
     return this.currentBattle() !== null;
   })
