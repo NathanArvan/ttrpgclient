@@ -1,4 +1,4 @@
-import { Component, computed, signal } from '@angular/core';
+import { Component, computed, OnInit, signal } from '@angular/core';
 import { User } from '../../../models/user';
 import { Battle } from '../../../models/battle';
 import { Character } from '../../../models/character';
@@ -8,6 +8,7 @@ import { BattleService } from '../../../services/battle.service';
 import { CharacterService } from '../../../services/character.service';
 import { ClassService } from '../../../services/class.service';
 import { WebsocketTestComponent } from "../websocket-test/websocket-test.component";
+import { SignalRService } from '../../../services/signal-r.service';
 
 export enum MultiplayerUIStates {
   UserMenu,
@@ -23,7 +24,7 @@ export enum MultiplayerUIStates {
   templateUrl: './multiplayer-test-page.component.html',
   styleUrl: './multiplayer-test-page.component.css'
 })
-export class MultiplayerTestPageComponent {
+export class MultiplayerTestPageComponent implements OnInit {
   public uiState = signal<MultiplayerUIStates>(MultiplayerUIStates.UserMenu);
   public uiStates = MultiplayerUIStates;
 
@@ -75,8 +76,17 @@ export class MultiplayerTestPageComponent {
     private userService: UserService,
     private battleService: BattleService,
     private characterService: CharacterService,
-    private classService: ClassService
+    private classService: ClassService,
+    private signalRService: SignalRService
   ) {}
+
+  ngOnInit(): void {
+    this.signalRService.startConnection().subscribe(() => {
+      this.signalRService.receiveMessage().subscribe((message) => {
+        console.log(`Message received. These are the current users ${message}`)
+      });
+    });
+  }
 
   createUser() {
     const user: User = {
@@ -96,6 +106,7 @@ export class MultiplayerTestPageComponent {
     this.userService.getUserByEmail(email).subscribe(user => {
       this.currentUser.set(user);
       this.uiState.set(this.uiStates.BattleMenu);
+      this.signalRService.userJoined(JSON.stringify(user));
     })
   }
 
@@ -111,7 +122,7 @@ export class MultiplayerTestPageComponent {
     if (battleIdInput !== null) {
       this.battleService.getBattle(parseInt(battleIdInput)).subscribe(battle => {
         this.currentBattle.set(battle);
-        this.uiState.set(this.uiStates.CharacterMenu);
+        this.uiState.set(this.uiStates.Map);
       })
     }
     else {
