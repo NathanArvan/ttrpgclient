@@ -43,7 +43,13 @@
         </div>
     }
     @case (uiStates.Map) {
-        <app-websocket-test [battleId]="currentBattleId()"></app-websocket-test>
+        <div>Current Players:</div>
+        @for (user of usersInBattle(); track $index) {
+            <div>
+                <div>Name: {{user.name}}</div>
+                <div>Playing: {{user.characters?.at(0)?.name}}</div>
+            </div>
+        }
     }
 }
 
