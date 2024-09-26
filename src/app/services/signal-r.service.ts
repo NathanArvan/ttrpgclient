@@ -32,7 +32,7 @@ export class SignalRService {
     });
   }
 
-  receiveMessage(): Observable<string> {
+  receiveUserJoinedBattleMessage(): Observable<string> {
     return new Observable<string>((observer) => {
       this.hubConnection.on('UserJoinedBattle', (message: string) => {
         observer.next(message);
