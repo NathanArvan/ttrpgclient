@@ -73,6 +73,11 @@ export class MultiplayerTestPageComponent implements OnInit {
   public existingBattleForm: FormGroup = new FormGroup(
     {battleId: new FormControl()}
   )
+
+  public createCharacterForm: FormGroup = new FormGroup({
+    name: new FormControl(),
+    classId : new FormControl()
+  })
   constructor(
     private userService: UserService,
     private battleService: BattleService,
@@ -85,9 +90,11 @@ export class MultiplayerTestPageComponent implements OnInit {
     this.signalRService.startConnection().subscribe(() => {
       this.signalRService.receiveUserJoinedBattleMessage().subscribe((message) => {
         const users: User[] = JSON.parse(message);
+        this.usersInBattle.set(users);
         console.log(`Message received. These are the current users ${message}`)
       });
     });
+    this.getClasses();
   }
 
   createUser() {
@@ -123,7 +130,7 @@ export class MultiplayerTestPageComponent implements OnInit {
     if (battleIdInput !== null) {
       this.battleService.getBattle(parseInt(battleIdInput)).subscribe(battle => {
         this.currentBattle.set(battle);
-        this.uiState.set(this.uiStates.Map);
+        this.uiState.set(this.uiStates.CharacterMenu);
       })
     }
     else {
@@ -133,7 +140,22 @@ export class MultiplayerTestPageComponent implements OnInit {
 
   // getCharacters() {}
 
-  createCharacter() {}
+  createCharacter() {
+    const character: Partial<Character> = {
+      name: this.createCharacterForm.controls["name"].value,
+      classId: this.createCharacterForm.controls["classId"].value,
+      battleId: this.currentBattleId(),
+    }
+    this.characterService.createCharacter(character).subscribe(character => {
+      let user = this.currentUser()
+      if( user !== null) {
+        user.characters = [character];
+        this.currentUser.set(user);
+        this.signalRService.userJoined(user)
+      }
+      this.uiState.set(MultiplayerUIStates.Map);
+    });
+  }
 
   useCurrentCharacter() {}
 

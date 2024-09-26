@@ -4,6 +4,7 @@ export interface Character {
     characterId: number;
     battleId: number | null;
     userId: number | null;
+    classId: number | null;
     name: string;
     tokenId: number;
     token: Token | null;

@@ -35,12 +35,25 @@
         </form>
     }
     @case (uiStates.CharacterMenu) {
-        <div [@if]="userCharacter() === null">
-            Create a character
-        </div>
-        <div [@if]="userCharacter() !== null">
+        @if (userCharacter() === null) {
+            <div>Create Character</div>
+            <form [formGroup]="createCharacterForm">
+                <div>
+                    <label for="characterName">Character Name</label>
+                    <input id="characterName" formControlName="name" />
+                </div>
+                <div>
+                @for (class of classes(); track $index) {
+                        <label for="characterClass">{{ class.name }}</label>
+                        <input type="radio" id="characterClass" [value]="class.classId"/>
+                    }
+                </div>
+                <button (click)="createCharacter()">Create Character</button>
+            </form>
+        }
+        @if (userCharacter() !== null) {
             Use {{ userCharacter()?.name }} and join the battle?
-        </div>
+        }
     }
     @case (uiStates.Map) {
         <div>Current Players:</div>
