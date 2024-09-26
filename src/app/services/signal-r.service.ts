@@ -1,6 +1,8 @@
 import { Injectable } from '@angular/core';
 import * as signalR from '@microsoft/signalr';
 import { Observable } from 'rxjs';
+import { UserJoinedDTO } from '../models/battle';
+import { User } from '../models/user';
 
 @Injectable({
   providedIn: 'root'
@@ -39,7 +41,11 @@ export class SignalRService {
   }
 
   
-  userJoined(message: string): void {
-    this.hubConnection.invoke('UserJoinedBattle', {battleId :1, user: message});
+  userJoined(user : User): void {
+    const payload : UserJoinedDTO = {
+      battleId : 1,
+      user
+    }
+    this.hubConnection.invoke('UserJoinedBattle', JSON.stringify(payload));
   }
 }

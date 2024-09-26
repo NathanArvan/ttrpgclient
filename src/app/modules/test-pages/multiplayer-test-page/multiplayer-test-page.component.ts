@@ -28,6 +28,7 @@ export class MultiplayerTestPageComponent implements OnInit {
   public uiState = signal<MultiplayerUIStates>(MultiplayerUIStates.UserMenu);
   public uiStates = MultiplayerUIStates;
 
+  public usersInBattle = signal<User[] | null>(null);
   public currentUser = signal<User | null>(null);
   public userIsLoaded = computed(() => {
     return this.currentUser() !== null;
@@ -83,6 +84,7 @@ export class MultiplayerTestPageComponent implements OnInit {
   ngOnInit(): void {
     this.signalRService.startConnection().subscribe(() => {
       this.signalRService.receiveMessage().subscribe((message) => {
+        const users: User[] = JSON.parse(message);
         console.log(`Message received. These are the current users ${message}`)
       });
     });
@@ -106,7 +108,7 @@ export class MultiplayerTestPageComponent implements OnInit {
     this.userService.getUserByEmail(email).subscribe(user => {
       this.currentUser.set(user);
       this.uiState.set(this.uiStates.BattleMenu);
-      this.signalRService.userJoined(JSON.stringify(user));
+      this.signalRService.userJoined(user);
     })
   }
 
