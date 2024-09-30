@@ -52,7 +52,10 @@
             </form>
         }
         @if (userCharacter() !== null) {
-            Use {{ userCharacter()?.name }} and join the battle?
+            <div>Use {{ userCharacter()?.name }} and join the battle?</div>
+            <button (click)="useCurrentCharacter()">Join</button>
+            <div>Or delete character and create a new one?</div>
+            <button (click)="removeCharacter()">Delete</button>
         }
     }
     @case (uiStates.Map) {

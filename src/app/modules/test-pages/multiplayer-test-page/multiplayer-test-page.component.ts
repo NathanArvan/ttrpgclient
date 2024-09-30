@@ -46,18 +46,7 @@ export class MultiplayerTestPageComponent implements OnInit {
     return this.currentBattle() !== null;
   })
 
-  public characters = signal<Character[]>([]);
-  public userCharacter = computed(() =>{
-    const currentUserId = this.currentUser()?.userId;
-    if (currentUserId === undefined) {
-      return null;
-    }
-    const found = this.characters().find(ch => ch.userId === currentUserId);
-    if (found === undefined) {
-      return null;
-    }
-    return found;
-  })
+  public userCharacter = signal<Character | null>(null)
 
   public classes = signal<any[]>([]);
 
@@ -130,6 +119,7 @@ export class MultiplayerTestPageComponent implements OnInit {
     if (battleIdInput !== null) {
       this.battleService.getBattle(parseInt(battleIdInput)).subscribe(battle => {
         this.currentBattle.set(battle);
+        this.getCharactersForThisBattleAndUser();
         this.uiState.set(this.uiStates.CharacterMenu);
       })
     }
@@ -152,12 +142,33 @@ export class MultiplayerTestPageComponent implements OnInit {
         user.characters = [character];
         this.currentUser.set(user);
         this.signalRService.userJoined(user)
+        this.userCharacter.set(character);
       }
       this.uiState.set(MultiplayerUIStates.Map);
     });
   }
 
-  useCurrentCharacter() {}
+  getCharactersForThisBattleAndUser() {
+    const battleId = this.currentBattle()?.battleId;
+    const userId = this.currentUser()?.userId;
+    if (battleId !== undefined && userId !== undefined && userId !== null) {
+      this.characterService.getCharacterByBattleIdAndUserId(battleId, userId)
+      .subscribe((characters: Character[]) => {
+        if (characters !== undefined && characters.length > 0) {
+          const character = characters[0];
+          this.userCharacter.set(character);
+        }
+      })
+    }
+  }
+
+  useCurrentCharacter() {
+    let user = this.currentUser()
+    if( user !== null) {
+      this.signalRService.userJoined(user)
+    }
+    this.uiState.set(MultiplayerUIStates.Map);
+  }
 
   removeCharacter() {}
 

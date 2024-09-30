@@ -19,6 +19,10 @@ export class CharacterService {
     return this.client.get<any[]>(`${this.baseURL}/characters`, {params: {battleIds: [battleId]}})
   }
 
+  public getCharacterByBattleIdAndUserId(battleId: number, userId: number) {
+    return this.client.get<any[]>(`${this.baseURL}/characters`, {params: {battleIds: [battleId], userIds: [userId]}})
+  }
+
   public createCharacter(payload: Partial<Character>) {
     return this.client.post<any>(`${this.baseURL}/characters`, payload);
   }
