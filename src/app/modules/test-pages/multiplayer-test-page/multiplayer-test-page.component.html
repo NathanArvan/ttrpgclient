@@ -45,7 +45,7 @@
                 <div>
                 @for (class of classes(); track $index) {
                         <label for="characterClass">{{ class.name }}</label>
-                        <input type="radio" id="characterClass" [value]="class.classId"/>
+                        <input type="radio" id="characterClass" formControlName="classId" [value]="class.classId"/>
                     }
                 </div>
                 <button (click)="createCharacter()">Create Character</button>
