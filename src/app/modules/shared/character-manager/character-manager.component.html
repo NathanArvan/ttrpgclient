@@ -1,1 +1,23 @@
-<p>character-manager works!</p>
+<div>Create Character</div>
+<form [formGroup]="createCharacterForm">
+    <div>
+        <label for="characterName">Character Name</label>
+        <input id="characterName" formControlName="name" />
+    </div>
+    <div>
+    @for (class of classes(); track $index) {
+            <label for="characterClass">{{ class.name }}</label>
+            <input type="radio" id="characterClass" formControlName="classId" [value]="class.classId"/>
+        }
+    </div>
+    <button (click)="createCharacter()">Create Character</button>
+</form>
+
+<div>List of Characters</div>
+<div style="display: flex; flex-direction: row; gap: 8px;">
+    @for (character of characters(); track $index) {
+        <div>Name: {{character.name}}</div>
+        <div>Class: {{getClassNameById(character.classId)}}</div>
+        <img style="height: 40px; width: 40px;"  src={{character.image}}>
+    }
+</div>

@@ -6,7 +6,6 @@ import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { UserService } from '../../../services/user.service';
 import { BattleService } from '../../../services/battle.service';
 import { CharacterService } from '../../../services/character.service';
-import { ClassService } from '../../../services/class.service';
 import { WebsocketTestComponent } from "../websocket-test/websocket-test.component";
 import { SignalRService } from '../../../services/signal-r.service';
 
@@ -48,30 +47,17 @@ export class MultiplayerTestPageComponent implements OnInit {
 
   public userCharacter = signal<Character | null>(null)
 
-  public classes = signal<any[]>([]);
 
-  public createUserForm: FormGroup = new FormGroup(
-    {
-      name: new FormControl(),
-      email: new FormControl()
-    }
-  )
-  public loadUserForm: FormGroup = new FormGroup(
-    {email: new FormControl()}
-  )
+
   public existingBattleForm: FormGroup = new FormGroup(
     {battleId: new FormControl()}
   )
 
-  public createCharacterForm: FormGroup = new FormGroup({
-    name: new FormControl(),
-    classId : new FormControl()
-  })
+
   constructor(
     private userService: UserService,
     private battleService: BattleService,
     private characterService: CharacterService,
-    private classService: ClassService,
     private signalRService: SignalRService
   ) {}
 
@@ -83,7 +69,6 @@ export class MultiplayerTestPageComponent implements OnInit {
         console.log(`Message received. These are the current users ${message}`)
       });
     });
-    this.getClasses();
   }
 
   createUser() {
@@ -172,9 +157,5 @@ export class MultiplayerTestPageComponent implements OnInit {
 
   removeCharacter() {}
 
-  getClasses() {
-    this.classService.getClasses().subscribe(classes => {
-      this.classes.set(classes);
-    });
-  }
+
 }
