@@ -1,31 +1,4 @@
 @switch (uiState()) {
-    @case (uiStates.UserMenu) {
-        <div style="border: 1px solid; border-radius: 4px;">
-            <h5>Create Account or sign In</h5>
-            <div style="display: flex; gap: 8px;">
-                <form [formGroup]="createUserForm">
-                    <div>Create Account</div>
-                    <div>
-                        <span>Name</span>
-                        <input formControlName="name" />
-                    </div>
-                    <div>
-                        <span>Email</span>
-                        <input formControlName="email" />
-                    </div>
-                    <button (click)="createUser()">Enter</button>
-                </form>
-                <form [formGroup]="loadUserForm">
-                    <div>Load Account</div>
-                    <div>
-                        <span>Email</span>
-                        <input formControlName="email" />
-                    </div>
-                    <button (click)="loadUser()">Enter</button>
-                </form>
-            </div>
-        </div>
-    }
     @case (uiStates.BattleMenu) {
         <button (click)="createBattle()">Create New Battle</button>
         <form [formGroup]="existingBattleForm">
@@ -35,28 +8,7 @@
         </form>
     }
     @case (uiStates.CharacterMenu) {
-        @if (userCharacter() === null) {
-            <div>Create Character</div>
-            <form [formGroup]="createCharacterForm">
-                <div>
-                    <label for="characterName">Character Name</label>
-                    <input id="characterName" formControlName="name" />
-                </div>
-                <div>
-                @for (class of classes(); track $index) {
-                        <label for="characterClass">{{ class.name }}</label>
-                        <input type="radio" id="characterClass" formControlName="classId" [value]="class.classId"/>
-                    }
-                </div>
-                <button (click)="createCharacter()">Create Character</button>
-            </form>
-        }
-        @if (userCharacter() !== null) {
-            <div>Use {{ userCharacter()?.name }} and join the battle?</div>
-            <button (click)="useCurrentCharacter()">Join</button>
-            <div>Or delete character and create a new one?</div>
-            <button (click)="removeCharacter()">Delete</button>
-        }
+
     }
     @case (uiStates.Map) {
         <div>Current Players:</div>

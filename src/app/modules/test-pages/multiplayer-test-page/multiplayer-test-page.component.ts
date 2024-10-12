@@ -10,7 +10,6 @@ import { WebsocketTestComponent } from "../websocket-test/websocket-test.compone
 import { SignalRService } from '../../../services/signal-r.service';
 
 export enum MultiplayerUIStates {
-  UserMenu,
   BattleMenu,
   CharacterMenu,
   Map
@@ -24,7 +23,7 @@ export enum MultiplayerUIStates {
   styleUrl: './multiplayer-test-page.component.css'
 })
 export class MultiplayerTestPageComponent implements OnInit {
-  public uiState = signal<MultiplayerUIStates>(MultiplayerUIStates.UserMenu);
+  public uiState = signal<MultiplayerUIStates>(MultiplayerUIStates.BattleMenu);
   public uiStates = MultiplayerUIStates;
 
   public usersInBattle = signal<User[] | null>(null);
@@ -45,9 +44,11 @@ export class MultiplayerTestPageComponent implements OnInit {
     return this.currentBattle() !== null;
   })
 
-  public userCharacter = signal<Character | null>(null)
+  public userCharacters = signal<Character[]>([]);
 
-
+  public loadUserForm: FormGroup = new FormGroup(
+    {email: new FormControl()}
+  )
 
   public existingBattleForm: FormGroup = new FormGroup(
     {battleId: new FormControl()}
@@ -71,19 +72,6 @@ export class MultiplayerTestPageComponent implements OnInit {
     });
   }
 
-  createUser() {
-    const user: User = {
-      name : this.createUserForm.controls['name'].value,
-      email : this.createUserForm.controls['email'].value,
-      userId: null,
-      characters : null,
-    }
-    this.userService.createUser(user).subscribe(user => {
-      this.currentUser.set(user);
-      this.uiState.set(this.uiStates.BattleMenu);
-    })
-  }
-
   loadUser() {
     const email = this.loadUserForm.controls['email'].value;
     this.userService.getUserByEmail(email).subscribe(user => {
@@ -96,6 +84,10 @@ export class MultiplayerTestPageComponent implements OnInit {
     this.battleService.createBattle().subscribe(battle => {
       this.currentBattle.set(battle);
       this.uiState.set(this.uiStates.CharacterMenu);
+      const userId = this.currentUser()?.userId;
+      if (userId !== undefined) {
+        this.getCharactersForUser(userId)
+      }
     })
   }
 
@@ -104,8 +96,11 @@ export class MultiplayerTestPageComponent implements OnInit {
     if (battleIdInput !== null) {
       this.battleService.getBattle(parseInt(battleIdInput)).subscribe(battle => {
         this.currentBattle.set(battle);
-        this.getCharactersForThisBattleAndUser();
         this.uiState.set(this.uiStates.CharacterMenu);
+        const userId = this.currentUser()?.userId;
+        if (userId !== undefined) {
+          this.getCharactersForUser(userId)
+        }
       })
     }
     else {
@@ -113,49 +108,15 @@ export class MultiplayerTestPageComponent implements OnInit {
     }
   }
 
-  // getCharacters() {}
-
-  createCharacter() {
-    const character: Partial<Character> = {
-      name: this.createCharacterForm.controls["name"].value,
-      classId: this.createCharacterForm.controls["classId"].value,
-      battleId: this.currentBattleId(),
-    }
-    this.characterService.createCharacter(character).subscribe(character => {
-      let user = this.currentUser()
-      if( user !== null) {
-        user.characters = [character];
-        this.currentUser.set(user);
-        this.signalRService.userJoined(user)
-        this.userCharacter.set(character);
-      }
-      this.uiState.set(MultiplayerUIStates.Map);
-    });
-  }
-
-  getCharactersForThisBattleAndUser() {
-    const battleId = this.currentBattle()?.battleId;
-    const userId = this.currentUser()?.userId;
-    if (battleId !== undefined && userId !== undefined && userId !== null) {
-      this.characterService.getCharacterByBattleIdAndUserId(battleId, userId)
-      .subscribe((characters: Character[]) => {
-        if (characters !== undefined && characters.length > 0) {
-          const character = characters[0];
-          this.userCharacter.set(character);
-        }
+  getCharactersForUser(userId: number | null) {
+    if (userId !== null) {
+      this.characterService.getCharacterByUserId(userId).subscribe(characters => {
+        this.userCharacters.set(characters);
       })
     }
   }
 
-  useCurrentCharacter() {
-    let user = this.currentUser()
-    if( user !== null) {
-      this.signalRService.userJoined(user)
-    }
-    this.uiState.set(MultiplayerUIStates.Map);
+  selectCharacter() {
+    
   }
-
-  removeCharacter() {}
-
-
 }
