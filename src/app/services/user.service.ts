@@ -13,7 +13,7 @@ export class UserService {
   constructor(private client: HttpClient) { }
 
   public getUserByEmail(email: string): Observable<User> {
-    return this.client.get<User>(`${this.baseURL}/users/${email}`)
+    return this.client.get<User>(`${this.baseURL}/users`, {params: {emails: [email]}})
   }
 
   public createUser(user: User): Observable<User> {
