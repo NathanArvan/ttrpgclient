@@ -18,7 +18,7 @@
 <div style="display: flex; flex-direction: row; gap: 8px;">
     @for (character of characters(); track $index) {
         <div>Name: {{character.name}}</div>
-        <div>Class: {{getClassNameById(character.classId)}}</div>
+        <div>Class: {{classService.getNameByClassId(character.classId)}}</div>
         <img style="height: 100px; width: 100px;"  src={{character.image}}>
     }
 </div>

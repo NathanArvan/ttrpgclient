@@ -63,14 +63,14 @@ export class CharacterManagerComponent implements OnInit {
     }
   }
 
-  getClassNameById(id: number | null): string {
-    const currentClasses = this.classes();
-    const foundClass = currentClasses.find(currentClass => {
-      return currentClass.id === id; 
-    })
-    if (foundClass === undefined) {
-      return "";
-    }
-    return foundClass.name;
-  }
+  // getClassNameById(id: number | null): string {
+  //   const currentClasses = this.classes();
+  //   const foundClass = currentClasses.find(currentClass => {
+  //     return currentClass.id === id; 
+  //   })
+  //   if (foundClass === undefined) {
+  //     return "";
+  //   }
+  //   return foundClass.name;
+  // }
 }
