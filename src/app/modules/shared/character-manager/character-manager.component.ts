@@ -14,7 +14,7 @@ import { ClassService } from '../../../services/class.service';
 })
 export class CharacterManagerComponent implements OnInit {
   @Input()
-  currentUser!: User;
+  currentUser!: User | null;
 
   public classes = signal<any[]>([]);
   public characters = signal<Character[]>([]);
