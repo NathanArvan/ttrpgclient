@@ -1,1 +1,25 @@
-<p>user-sign-in works!</p>
+<div style="border: 1px solid; border-radius: 4px;">
+    <h5>Create Account or sign In</h5>
+    <div style="display: flex; gap: 8px;">
+        <form [formGroup]="createUserForm">
+            <div>Create Account</div>
+            <div>
+                <span>Name</span>
+                <input formControlName="name" />
+            </div>
+            <div>
+                <span>Email</span>
+                <input formControlName="email" />
+            </div>
+            <button (click)="createUser()">Enter</button>
+        </form>
+        <form [formGroup]="loadUserForm">
+            <div>Load Account</div>
+            <div>
+                <span>Email</span>
+                <input formControlName="email" />
+            </div>
+            <button (click)="loadUser()">Enter</button>
+        </form>
+    </div>
+</div>

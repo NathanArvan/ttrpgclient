@@ -1,12 +1,12 @@
 import { Component, EventEmitter, Output } from '@angular/core';
 import { UserService } from '../../../services/user.service';
-import { FormGroup, FormControl } from '@angular/forms';
+import { FormGroup, FormControl, ReactiveFormsModule } from '@angular/forms';
 import { User } from '../../../models/user';
 
 @Component({
   selector: 'app-user-sign-in',
   standalone: true,
-  imports: [],
+  imports: [ReactiveFormsModule],
   templateUrl: './user-sign-in.component.html',
   styleUrl: './user-sign-in.component.css'
 })
