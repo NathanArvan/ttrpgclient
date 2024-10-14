@@ -8,6 +8,7 @@
     @for (class of classes(); track $index) {
             <label for="characterClass">{{ class.name }}</label>
             <input type="radio" id="characterClass" formControlName="classId" [value]="class.classId"/>
+            <img [src]="classService.getImageByClassId( class.classId )">
         }
     </div>
     <button (click)="createCharacter()">Create Character</button>

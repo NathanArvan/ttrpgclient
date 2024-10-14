@@ -26,7 +26,7 @@ export class CharacterManagerComponent implements OnInit {
 
   constructor(
     private characterService: CharacterService,
-    private classService: ClassService
+    public classService: ClassService
   ) {}
 
   ngOnInit(): void {
@@ -35,10 +35,12 @@ export class CharacterManagerComponent implements OnInit {
   }
 
   createCharacter() {
+    const classId = this.createCharacterForm.controls["classId"].value;
     const character: Partial<Character> = {
       name: this.createCharacterForm.controls["name"].value,
-      classId: this.createCharacterForm.controls["classId"].value,
+      classId,
       userId: this.currentUser?.userId,
+      image: this.classService.getImageByClassId(classId)
     }
     this.characterService.createCharacter(character).subscribe(character => {
       let previousCharacters = this.characters();
