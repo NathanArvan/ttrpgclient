@@ -13,12 +13,18 @@
     </div>
     <button (click)="createCharacter()">Create Character</button>
 </form>
-
-<div>List of Characters</div>
-<div style="display: flex; flex-direction: row; gap: 8px;">
+<br>
+<br>
+<br>
+<h4>List of Characters</h4>
+<div style="display: flex; flex-direction: column; gap: 8px;">
     @for (character of characters(); track $index) {
-        <div>Name: {{character.name}}</div>
-        <div>Class: {{classService.getNameByClassId(character.classId)}}</div>
-        <img style="height: 100px; width: 100px;"  src={{character.image}}>
+        <div style="display: flex; flex-direction: row;">
+            <div style="display: flex; flex-direction: column;">
+                <div>Name: {{character.name}}</div>
+                <div>Class: {{classService.getNameByClassId(character.classId)}}</div>
+            </div>
+            <img style="height: 100px; width: 100px;"  src={{character.image}}>
+        </div>
     }
 </div>
