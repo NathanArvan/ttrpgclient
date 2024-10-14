@@ -5,6 +5,7 @@ import { BasicCombatTestPageComponent } from './basic-combat-test-page/basic-com
 import { PhaserTestPageComponent } from './phaser-test-page/phaser-test-page.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { MultiplayerTestPageComponent } from './multiplayer-test-page/multiplayer-test-page.component';
+import { CharacterCreateTestPageComponent } from './character-create-test-page/character-create-test-page.component';
 
 const routes : Routes = [
   {
@@ -18,6 +19,10 @@ const routes : Routes = [
   {
     path: 'multiplayer-test',
     component: MultiplayerTestPageComponent
+  },
+  {
+    path: 'character-creator-test',
+    component: CharacterCreateTestPageComponent
   }
 ]
 
