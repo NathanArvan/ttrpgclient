@@ -11,15 +11,15 @@ export class ClassService {
   public ClassImages = [
     {
       classId: 1,
-      image: 'src/assets/game-art/figma-assets/Warrior_Token.svg'
+      image: '/assets/game-art/figma-assets/Warrior_Token.svg'
     },
     {
       classId: 2,
-      image: 'src/assets/game-art/figma-assets/Sage_Token.svg',
+      image: '/assets/game-art/figma-assets/Sage_Token.svg',
     },
     {
       classId: 3,
-      image: 'src/assets/game-art/figma-assets/Thief_Token.svg'
+      image: '/assets/game-art/figma-assets/Thief_Token.svg'
     }
   ]
 
