@@ -2,7 +2,6 @@ import { Component, computed, input, OnInit, signal } from '@angular/core';
 import { MapService } from '../../../services/map.service';
 import { Map, MapCell } from '../../../models/map';
 import { TokenService } from '../../../services/token.service';
-import { MapGridComponent } from '../../shared/map-grid/map-grid.component';
 import { Token } from '../../../models/token';
 import { AbilityService } from '../../../services/ability.service';
 import { CharacterService } from '../../../services/character.service';
@@ -39,7 +38,7 @@ export let TestEnemy: Partial<Character> = {
 @Component({
   selector: 'app-basic-combat-test-page',
   standalone: true,
-  imports: [MapGridComponent, CommonModule, ReactiveFormsModule],
+  imports: [CommonModule, ReactiveFormsModule],
   templateUrl: './basic-combat-test-page.component.html',
   styleUrl: './basic-combat-test-page.component.css'
 })
