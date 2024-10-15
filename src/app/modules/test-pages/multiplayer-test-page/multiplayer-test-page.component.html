@@ -1,4 +1,14 @@
 @switch (uiState()) {
+    @case (uiStates.UserMenu) {
+        <form [formGroup]="loadUserForm">
+            <div>Load Account</div>
+            <div>
+                <span>Email</span>
+                <input formControlName="email" />
+            </div>
+            <button (click)="loadUser()">Enter</button>
+        </form>
+    }
     @case (uiStates.BattleMenu) {
         <button (click)="createBattle()">Create New Battle</button>
         <form [formGroup]="existingBattleForm">
@@ -8,6 +18,24 @@
         </form>
     }
     @case (uiStates.CharacterMenu) {
+        @if (userCharacters().length === 0) {
+            <div>
+                Create a character on the character create page.
+            </div>
+        }
+        @else {
+            <div>Select a character to play with:</div>
+            @for (character of userCharacters(); track $index) {
+                <div style="display: flex; flex-direction: row;">
+                    <div style="display: flex; flex-direction: column;">
+                        <div>Name: {{character.name}}</div>
+                        <div>Class: {{classService.getNameByClassId(character.classId)}}</div>
+                    </div>
+                    <img style="height: 100px; width: 100px;"  src={{character.image}}>
+                    <button (click)="selectCharacter(character)">Select</button>
+                </div>
+            }
+        }
 
     }
     @case (uiStates.Map) {

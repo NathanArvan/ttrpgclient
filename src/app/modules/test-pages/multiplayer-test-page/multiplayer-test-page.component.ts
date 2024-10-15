@@ -8,8 +8,10 @@ import { BattleService } from '../../../services/battle.service';
 import { CharacterService } from '../../../services/character.service';
 import { WebsocketTestComponent } from "../websocket-test/websocket-test.component";
 import { SignalRService } from '../../../services/signal-r.service';
+import { ClassService } from '../../../services/class.service';
 
 export enum MultiplayerUIStates {
+  UserMenu,
   BattleMenu,
   CharacterMenu,
   Map
@@ -23,7 +25,7 @@ export enum MultiplayerUIStates {
   styleUrl: './multiplayer-test-page.component.css'
 })
 export class MultiplayerTestPageComponent implements OnInit {
-  public uiState = signal<MultiplayerUIStates>(MultiplayerUIStates.BattleMenu);
+  public uiState = signal<MultiplayerUIStates>(MultiplayerUIStates.UserMenu);
   public uiStates = MultiplayerUIStates;
 
   public usersInBattle = signal<User[] | null>(null);
@@ -45,6 +47,7 @@ export class MultiplayerTestPageComponent implements OnInit {
   })
 
   public userCharacters = signal<Character[]>([]);
+  public selectedCharacter = signal<Character | null>(null);
 
   public loadUserForm: FormGroup = new FormGroup(
     {email: new FormControl()}
@@ -59,7 +62,8 @@ export class MultiplayerTestPageComponent implements OnInit {
     private userService: UserService,
     private battleService: BattleService,
     private characterService: CharacterService,
-    private signalRService: SignalRService
+    private signalRService: SignalRService,
+    public classService: ClassService
   ) {}
 
   ngOnInit(): void {
@@ -116,7 +120,8 @@ export class MultiplayerTestPageComponent implements OnInit {
     }
   }
 
-  selectCharacter() {
-    
+  selectCharacter(character: Character) {
+    this.selectedCharacter.set(character);
+    this.uiState.set(this.uiStates.Map);
   }
 }
