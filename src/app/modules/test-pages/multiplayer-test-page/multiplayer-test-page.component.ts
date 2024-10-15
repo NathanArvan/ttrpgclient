@@ -10,6 +10,7 @@ import { WebsocketTestComponent } from "../websocket-test/websocket-test.compone
 import { SignalRService } from '../../../services/signal-r.service';
 import { ClassService } from '../../../services/class.service';
 import { Map, MapCell } from '../../../models/map';
+import { BattleGridComponent } from "../../shared/battle-grid/battle-grid.component";
 
 export enum MultiplayerUIStates {
   UserMenu,
@@ -21,7 +22,7 @@ export enum MultiplayerUIStates {
 @Component({
   selector: 'app-multiplayer-test-page',
   standalone: true,
-  imports: [ReactiveFormsModule, WebsocketTestComponent],
+  imports: [ReactiveFormsModule, WebsocketTestComponent, BattleGridComponent],
   templateUrl: './multiplayer-test-page.component.html',
   styleUrl: './multiplayer-test-page.component.css'
 })
@@ -48,8 +49,9 @@ export class MultiplayerTestPageComponent implements OnInit {
   })
 
   public userCharacters = signal<Character[]>([]);
-  public selectedCharacter = signal<Character | null>(null);
-  
+  public currentCharacter = signal<Character | null>(null);
+  public currentCharacterIsSelected = signal<boolean>(false);
+
   public allCharactersOnMap = signal<Character[]>([]);
   public mapMatrix = computed<MapCell[][]>(() => {
     let mapMatrix = new Array(this.map.length);
@@ -146,7 +148,19 @@ export class MultiplayerTestPageComponent implements OnInit {
   }
 
   selectCharacter(character: Character) {
-    this.selectedCharacter.set(character);
+    this.currentCharacter.set(character);
     this.uiState.set(this.uiStates.Map);
+  }
+
+  currentCharacterSelected() {
+    this.currentCharacterIsSelected.set(true);
+  }
+
+  onMatrixCellClicked($event: {xPosition: number, yPosition: number}) {
+
+  }
+
+  updateCharacterPosition() {
+    
   }
 }

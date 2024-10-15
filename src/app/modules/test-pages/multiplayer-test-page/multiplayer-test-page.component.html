@@ -39,13 +39,18 @@
 
     }
     @case (uiStates.Map) {
-        <div>Current Players:</div>
+        <!-- <div>Current Players:</div>
         @for (user of usersInBattle(); track $index) {
             <div>
                 <div>Name: {{user.name}}</div>
                 <div>Playing: {{user.characters?.at(0)?.name}}</div>
             </div>
+        } -->
+        @if (currentCharacter()?.xPosition === null && currentCharacter()?.yPosition === null) {
+            <h4>Select Character to move them onto the battle field</h4>
+            <img [src]="currentCharacter()?.image" (click)="currentCharacterSelected()">
         }
+        <app-battle-grid [mapMatrix]="mapMatrix()" (cellClicked)="" ></app-battle-grid>
     }
 }
 

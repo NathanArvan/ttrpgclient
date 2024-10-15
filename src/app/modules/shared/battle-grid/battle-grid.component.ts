@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { MapCell } from '../../../models/map';
 
 @Component({
@@ -11,10 +11,11 @@ import { MapCell } from '../../../models/map';
 export class BattleGridComponent {
 
   @Input() mapMatrix: MapCell[][] = [];
+  @Output() cellClicked = new EventEmitter();
   xIndex: number = 0;
   yIndex: number = 0;
 
   onCellClicked(xIndex: number, yIndex: number) {
-    
+    this.cellClicked.emit({xIndex, yIndex});
   }
 }
