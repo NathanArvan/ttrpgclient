@@ -9,6 +9,7 @@ import { CharacterService } from '../../../services/character.service';
 import { WebsocketTestComponent } from "../websocket-test/websocket-test.component";
 import { SignalRService } from '../../../services/signal-r.service';
 import { ClassService } from '../../../services/class.service';
+import { Map, MapCell } from '../../../models/map';
 
 export enum MultiplayerUIStates {
   UserMenu,
@@ -48,6 +49,21 @@ export class MultiplayerTestPageComponent implements OnInit {
 
   public userCharacters = signal<Character[]>([]);
   public selectedCharacter = signal<Character | null>(null);
+  
+  public allCharactersOnMap = signal<Character[]>([]);
+  public mapMatrix = computed<MapCell[][]>(() => {
+    let mapMatrix = new Array(this.map.length);
+    for(let i =0; i < this.map.length; i++ ) {
+      mapMatrix[i] = new Array(this.map.width);
+      for(let j = 0; j < this.map.width; j++) {
+        mapMatrix[i][j] = {token: null, image: null, borderClass: null}
+      }
+    }
+    this.allCharactersOnMap().forEach(character => {  
+      mapMatrix[character.xPosition][character.yPosition].image = character.image;
+    })
+    return mapMatrix;
+  }); 
 
   public loadUserForm: FormGroup = new FormGroup(
     {email: new FormControl()}
@@ -56,6 +72,15 @@ export class MultiplayerTestPageComponent implements OnInit {
   public existingBattleForm: FormGroup = new FormGroup(
     {battleId: new FormControl()}
   )
+
+  public map : Map = {
+    length: 5,
+    width: 10,
+    mapId:1,
+    campaignId:1,
+    image: '',
+    tokens: [],
+  }
 
 
   constructor(

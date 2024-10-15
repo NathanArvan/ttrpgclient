@@ -2,22 +2,15 @@
     @for (row of mapMatrix; track xIndex) {
         <div style="display: flex; flex-direction: column;">
             @for (cell of row; track yIndex) {
-                <span (click)="onCellClicked(xIndex, yIndex)" [ngClass]="cell.borderClass" class="cell">
-                   
+                <span (click)="onCellClicked(xIndex, yIndex)" class="cell">
+                    @if (cell.image !== null) {
+                        <img [src]="cell.image">
+                    }
+                    @else {
+                        <span>&nbsp;</span>
+                    }
                 </span>
             }
         </div>
     }
 </div>
-<!-- <div *ngFor="let row of mapMatrix(); let xIndex = index" style="display: flex; flex-direction: row;">
-    <div *ngFor="let cell of row; let yIndex = index" style="display: flex; flex-direction: column;">
-        <span (click)="onCellClicked(xIndex, yIndex)" [ngClass]="cell.borderClass" class="cell">
-            <span *ngIf="cell?.image else noToken">
-                <img [src]="cell?.image">
-            </span>
-            <ng-template #noToken>
-                <span>&nbsp;</span>
-            </ng-template>
-        </span>
-    </div>
-</div> -->
