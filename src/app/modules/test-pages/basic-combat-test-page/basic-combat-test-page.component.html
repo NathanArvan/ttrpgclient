@@ -1,4 +1,4 @@
-<div *ngIf="battleLoaded() === false">
+<div *ngIf="battleLoaded()">
     <div>
         <button (click)="createNewBattle()">Create New Battle</button>
         <form [formGroup]="existingBattleForm">
@@ -8,7 +8,7 @@
         </form>
     </div>
 </div>
-<div *ngIf="battleLoaded() ===true">
+<div *ngIf="battleLoaded()">
     <div style="display: flex;">
         <div style="position: relative; z-index: 1;" class="map-container">
             <div style="position: relative;z-index: 2;">
