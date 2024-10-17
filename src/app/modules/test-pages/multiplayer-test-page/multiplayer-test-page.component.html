@@ -50,7 +50,7 @@
             <h4>Select Character to move them onto the battle field</h4>
             <img [src]="currentCharacter()?.image" (click)="currentCharacterSelected()">
         }
-        <app-battle-grid [mapMatrix]="mapMatrix()" (cellClicked)="" ></app-battle-grid>
+        <app-battle-grid [mapMatrix]="mapMatrix()" (cellClicked)="onMatrixCellClicked($event)" ></app-battle-grid>
     }
 }
 
