@@ -1,6 +1,6 @@
 import { Component, computed, OnInit, signal } from '@angular/core';
 import { User } from '../../../models/user';
-import { Battle } from '../../../models/battle';
+import { Battle, CharacterMessageDTO, UserJoinedDTO } from '../../../models/battle';
 import { Character } from '../../../models/character';
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { UserService } from '../../../services/user.service';
@@ -100,6 +100,16 @@ export class MultiplayerTestPageComponent implements OnInit {
         this.usersInBattle.set(users);
         console.log(`Message received. These are the current users ${message}`)
       });
+
+      this.signalRService.receiveCharacterJoinedBattleMessage().subscribe((message) => {
+        const characters: Character[] = JSON.parse(message.toLowerCase());
+        this.allCharactersOnMap.set(characters);
+      });
+
+      this.signalRService.receiveUserJoinedBattleMessage().subscribe((message) => {
+        const users: User[] = JSON.parse(message.toLowerCase());
+        this.usersInBattle.set(users);
+      });
     });
   }
 
@@ -162,5 +172,17 @@ export class MultiplayerTestPageComponent implements OnInit {
 
   updateCharacterPosition() {
     
+  }
+  
+  userJoinedBattle(payload: UserJoinedDTO) {
+    //this.signalRService.userJoined()
+  }
+
+  characterJoinedBattle(payload: CharacterMessageDTO) {
+    this.signalRService.characterJoined(payload);
+  }
+
+  characterUpdate(payload: CharacterMessageDTO) {
+    this.signalRService.characterUpdate(payload);
   }
 }
