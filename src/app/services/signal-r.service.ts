@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import * as signalR from '@microsoft/signalr';
 import { Observable } from 'rxjs';
-import { UserJoinedDTO } from '../models/battle';
+import { CharacterMessageDTO, UserJoinedDTO } from '../models/battle';
 import { User } from '../models/user';
 
 @Injectable({
@@ -47,5 +47,31 @@ export class SignalRService {
       user
     }
     this.hubConnection.invoke('UserJoinedBattle', JSON.stringify(payload));
+  }
+
+  receiveCharacterJoinedBattleMessage(): Observable<string> {
+    return new Observable<string>((observer) => {
+      this.hubConnection.on('CharacterJoinedBattle', (message: string) => {
+        observer.next(message);
+      });
+    });
+  }
+
+  
+  characterJoined(payload : CharacterMessageDTO): void {
+    this.hubConnection.invoke('CharacterJoinedBattle', JSON.stringify(payload));
+  }
+
+  receiveCharacterUpdateMessage(): Observable<string> {
+    return new Observable<string>((observer) => {
+      this.hubConnection.on('CharacterUpdate', (message: string) => {
+        observer.next(message);
+      });
+    });
+  }
+
+  
+  characterUpdate(payload : CharacterMessageDTO): void {
+    this.hubConnection.invoke('CharacterUpdate', JSON.stringify(payload));
   }
 }

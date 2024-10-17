@@ -11,3 +11,8 @@ export interface UserJoinedDTO {
     battleId: number;
     user: User;
 }
+
+export interface CharacterMessageDTO {
+    battleId: number;
+    character: Character;
+}
