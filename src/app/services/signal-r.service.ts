@@ -39,13 +39,8 @@ export class SignalRService {
       });
     });
   }
-
   
-  userJoined(user : User): void {
-    const payload : UserJoinedDTO = {
-      battleId : 1,
-      user
-    }
+  userJoined(payload : UserJoinedDTO): void {
     this.hubConnection.invoke('UserJoinedBattle', JSON.stringify(payload));
   }
 
