@@ -61,9 +61,11 @@ export class MultiplayerTestPageComponent implements OnInit {
         mapMatrix[i][j] = {token: null, image: null, borderClass: null}
       }
     }
-    this.allCharactersOnMap().forEach(character => {  
-      mapMatrix[character.xPosition][character.yPosition].image = character.image;
-    })
+    // this.allCharactersOnMap().forEach(character => {  
+    //   if (character.xPosition !== null && character.yPosition !== null) {
+    //     mapMatrix[character.xPosition][character.yPosition].image = character.image;
+    //   }
+    // })
     return mapMatrix;
   }); 
 
