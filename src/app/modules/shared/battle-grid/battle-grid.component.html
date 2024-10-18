@@ -1,7 +1,7 @@
 <div style="display: flex; flex-direction: column;">
-    @for (row of mapMatrix; track xIndex) {
-        <div style="display: flex; flex-direction: column;">
-            @for (cell of row; track yIndex) {
+    @for (column of mapMatrix; track xIndex) {
+        <div style="display: flex; flex-direction: row;">
+            @for (cell of column; track yIndex) {
                 <span (click)="onCellClicked(xIndex, yIndex)" class="cell">
                     @if (cell.image !== null) {
                         <img [src]="cell.image">
