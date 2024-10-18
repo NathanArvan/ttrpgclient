@@ -106,9 +106,9 @@ export class MultiplayerTestPageComponent implements OnInit {
         this.allCharactersOnMap.set(characters);
       });
 
-      this.signalRService.receiveUserJoinedBattleMessage().subscribe((message) => {
-        const users: User[] = JSON.parse(message.toLowerCase());
-        this.usersInBattle.set(users);
+      this.signalRService.receiveCharacterUpdateMessage().subscribe((message) => {
+        const characters: Character[] = JSON.parse(message.toLowerCase());
+        this.allCharactersOnMap.set(characters);
       });
     });
   }
@@ -160,6 +160,23 @@ export class MultiplayerTestPageComponent implements OnInit {
   selectCharacter(character: Character) {
     this.currentCharacter.set(character);
     this.uiState.set(this.uiStates.Map);
+    const user = this.currentUser();
+    const battleId = this.currentBattleId();
+    if (battleId !== null && user !== null) {
+      const userData: UserJoinedDTO = {
+        battleId,
+        user
+      }
+      this.userJoinedBattle(userData);
+    }
+
+    if (battleId !== null && character !== null) {
+      const characterData: CharacterMessageDTO = {
+        battleId,
+        character
+      }
+      this.characterJoinedBattle(characterData);
+    }
   }
 
   currentCharacterSelected() {
@@ -167,15 +184,61 @@ export class MultiplayerTestPageComponent implements OnInit {
   }
 
   onMatrixCellClicked($event: {xPosition: number, yPosition: number}) {
-
+    const currentCellOccupant = this.getCharacterAtPosition($event);
+    const cellIsEmpty = currentCellOccupant === null;
+    const cellOccupantIsCurrentCharacter = (currentCellOccupant === this.currentCharacter() && currentCellOccupant !== null);
+    if (this.currentCharacterIsSelected() && cellIsEmpty) {
+      this.updateCharacterPosition($event)
+      return;
+    }
+    if (cellOccupantIsCurrentCharacter) {
+      this.currentCharacterIsSelected.set(false);
+      return;
+    }
+    if (!cellIsEmpty && this.currentCharacterIsSelected()) {
+      this.enemyAttacked (currentCellOccupant);
+    }
   }
 
-  updateCharacterPosition() {
-    
+  updateCharacterPosition(position: {xPosition: number, yPosition: number}) {
+    let character = this.currentCharacter();
+    if (character !== null) {
+      character.xPosition = position.xPosition;
+      character.yPosition = position.yPosition;
+    }
+    this.currentCharacter.set(character);
+    const battleId = this.currentBattleId();
+    if (battleId !== null && character !== null) {
+      const message: CharacterMessageDTO = {
+        battleId,
+        character
+      }
+      this.characterUpdate(message)
+    }
+  }
+
+  enemyAttacked(character: Character) {
+    character.hitPoints = character.hitPoints - 5;
+    const battleId = this.currentBattleId();
+    if (battleId !== null && character !== null) {
+      const message: CharacterMessageDTO = {
+        battleId,
+        character
+      }
+      this.characterUpdate(message)
+    }
+  }
+
+  getCharacterAtPosition(position: {xPosition: number, yPosition: number}) {
+    const found = this.allCharactersOnMap().find(ch => ch.xPosition === position.xPosition && ch.yPosition === position.yPosition);
+    if (found === undefined) {
+      return null;
+    }
+    return found;
   }
   
   userJoinedBattle(payload: UserJoinedDTO) {
-    //this.signalRService.userJoined()
+    this.signalRService.userJoined(payload)
   }
 
   characterJoinedBattle(payload: CharacterMessageDTO) {
