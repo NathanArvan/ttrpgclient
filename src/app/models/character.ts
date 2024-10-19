@@ -21,7 +21,7 @@ export interface Character {
     actions: number;
     accuracy:number;
     evasion: number;
-    xPosition: number;
-    yPosition: number;
+    xPosition: number | null;
+    yPosition: number | null;
     image: string;
 }

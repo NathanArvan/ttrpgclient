@@ -55,7 +55,7 @@ export class BasicCombatTestPageComponent implements OnInit {
   public characters = signal<Character[]>([]);
   public characterPosition = computed<{xPosition: number, yPosition: number} | null>(() => {
     const character = this.characters().find(pc => pc.name === "Test Character");
-    if (character === undefined) {
+    if (character === undefined || character.xPosition === null || character.yPosition === null) {
       return null;
     }
     return {xPosition: character.xPosition, yPosition: character.yPosition}
@@ -69,7 +69,7 @@ export class BasicCombatTestPageComponent implements OnInit {
   });
   public enemyPosition = computed<{xPosition: number, yPosition: number} | null>(() => {
     const character = this.enemy();
-    if (character !== null) {
+    if (character !== null && character.xPosition !== null && character.yPosition !== null) {
       return {xPosition: character?.xPosition, yPosition: character?.yPosition}
     }
     return null;
@@ -102,6 +102,7 @@ export class BasicCombatTestPageComponent implements OnInit {
       }
     }
     this.characters().forEach(character => {  
+      if (character.xPosition !== null && character.yPosition !== null)
       mapMatrix[character.xPosition][character.yPosition].image = character.image;
     })
     return mapMatrix;
