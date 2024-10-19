@@ -61,11 +61,12 @@ export class MultiplayerTestPageComponent implements OnInit {
         mapMatrix[i][j] = {token: null, image: null, borderClass: null}
       }
     }
-    // this.allCharactersOnMap().forEach(character => {  
-    //   if (character.xPosition !== null && character.yPosition !== null) {
-    //     mapMatrix[character.xPosition][character.yPosition].image = character.image;
-    //   }
-    // })
+    this.allCharactersOnMap().forEach(character => {  
+      console.log(character);
+      if (character.xPosition !== null && character.yPosition !== null) {
+        mapMatrix[character.xPosition][character.yPosition].image = character.image;
+      }
+    })
     return mapMatrix;
   }); 
 
@@ -108,7 +109,7 @@ export class MultiplayerTestPageComponent implements OnInit {
         this.allCharactersOnMap.set(characters);
       });
 
-      this.signalRService.receiveCharacterUpdateMessage().subscribe((message) => {
+      this.signalRService.receiveCharacterUpdatedMessage().subscribe((message) => {
         const characters: Character[] = JSON.parse(message);
         this.allCharactersOnMap.set(characters);
       });
@@ -185,7 +186,8 @@ export class MultiplayerTestPageComponent implements OnInit {
     this.currentCharacterIsSelected.set(true);
   }
 
-  onMatrixCellClicked($event: {xPosition: number, yPosition: number}) {
+  onMatrixCellClicked($event: {xIndex: number, yIndex: number}) {
+    console.log($event)
     const currentCellOccupant = this.getCharacterAtPosition($event);
     const cellIsEmpty = currentCellOccupant === null;
     const cellOccupantIsCurrentCharacter = (currentCellOccupant === this.currentCharacter() && currentCellOccupant !== null);
@@ -202,12 +204,13 @@ export class MultiplayerTestPageComponent implements OnInit {
     }
   }
 
-  updateCharacterPosition(position: {xPosition: number, yPosition: number}) {
+  updateCharacterPosition(position: {xIndex: number, yIndex: number}) {
     let character = this.currentCharacter();
     if (character !== null) {
-      character.xPosition = position.xPosition;
-      character.yPosition = position.yPosition;
+      character.xPosition = position.xIndex;
+      character.yPosition = position.yIndex;
     }
+    console.log(position, character);
     this.currentCharacter.set(character);
     const battleId = this.currentBattleId();
     if (battleId !== null && character !== null) {
@@ -231,8 +234,8 @@ export class MultiplayerTestPageComponent implements OnInit {
     }
   }
 
-  getCharacterAtPosition(position: {xPosition: number, yPosition: number}) {
-    const found = this.allCharactersOnMap().find(ch => ch.xPosition === position.xPosition && ch.yPosition === position.yPosition);
+  getCharacterAtPosition(position: {xIndex: number, yIndex: number}) {
+    const found = this.allCharactersOnMap().find(ch => ch.xPosition === position.xIndex && ch.yPosition === position.yIndex);
     if (found === undefined) {
       return null;
     }
@@ -248,6 +251,6 @@ export class MultiplayerTestPageComponent implements OnInit {
   }
 
   characterUpdate(payload: CharacterMessageDTO) {
-    this.signalRService.characterUpdate(payload);
+    this.signalRService.characterUpdated(payload);
   }
 }

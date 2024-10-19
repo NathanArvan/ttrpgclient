@@ -16,6 +16,7 @@ export class BattleGridComponent {
   yIndex: number = 0;
 
   onCellClicked(xIndex: number, yIndex: number) {
+    console.log(xIndex, yIndex);
     this.cellClicked.emit({xIndex, yIndex});
   }
 }

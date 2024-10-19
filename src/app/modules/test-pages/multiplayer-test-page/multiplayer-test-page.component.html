@@ -51,6 +51,8 @@
                 <div>Name: {{ character.name }}</div>
                 <div>Class: {{ this.classService.getNameByClassId(character.classId)}}</div>
                 <div>HitPoints: {{ character.hitPoints}}</div>
+                <div>xPosition: {{ character.xPosition}}</div>
+                <div>yPosition: {{ character.yPosition}}</div>
             </div>
         }
         @if (currentCharacter()?.xPosition === null && currentCharacter()?.yPosition === null) {

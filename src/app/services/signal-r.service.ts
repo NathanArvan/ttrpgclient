@@ -57,16 +57,16 @@ export class SignalRService {
     this.hubConnection.invoke('CharacterJoinedBattle', JSON.stringify(payload));
   }
 
-  receiveCharacterUpdateMessage(): Observable<string> {
+  receiveCharacterUpdatedMessage(): Observable<string> {
     return new Observable<string>((observer) => {
-      this.hubConnection.on('CharacterUpdate', (message: string) => {
+      this.hubConnection.on('CharacterUpdated', (message: string) => {
         observer.next(message);
       });
     });
   }
 
   
-  characterUpdate(payload : CharacterMessageDTO): void {
-    this.hubConnection.invoke('CharacterUpdate', JSON.stringify(payload));
+  characterUpdated(payload : CharacterMessageDTO): void {
+    this.hubConnection.invoke('CharacterUpdated', JSON.stringify(payload));
   }
 }
