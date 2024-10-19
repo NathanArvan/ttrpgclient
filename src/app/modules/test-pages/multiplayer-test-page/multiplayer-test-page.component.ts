@@ -98,18 +98,18 @@ export class MultiplayerTestPageComponent implements OnInit {
   ngOnInit(): void {
     this.signalRService.startConnection().subscribe(() => {
       this.signalRService.receiveUserJoinedBattleMessage().subscribe((message) => {
-        const users: User[] = JSON.parse(message.toLowerCase());
+        const users: User[] = JSON.parse(message);
         this.usersInBattle.set(users);
         console.log(`Message received. These are the current users ${message}`)
       });
 
       this.signalRService.receiveCharacterJoinedBattleMessage().subscribe((message) => {
-        const characters: Character[] = JSON.parse(message.toLowerCase());
+        const characters: Character[] = JSON.parse(message);
         this.allCharactersOnMap.set(characters);
       });
 
       this.signalRService.receiveCharacterUpdateMessage().subscribe((message) => {
-        const characters: Character[] = JSON.parse(message.toLowerCase());
+        const characters: Character[] = JSON.parse(message);
         this.allCharactersOnMap.set(characters);
       });
     });
