@@ -49,7 +49,24 @@ export class MultiplayerTestPageComponent implements OnInit {
   })
 
   public userCharacters = signal<Character[]>([]);
-  public currentCharacter = signal<Character | null>(null);
+
+  public currentCharacter = computed<Character | null>(() => {
+    if (this.currentUser() === null) {
+      return null;
+    }
+    if (this.allCharactersOnMap() === null) {
+      return null;
+    }
+    const userId = this.currentUser()?.userId;
+    const found = this.allCharactersOnMap().find(ch => {
+      return ch.userId === userId;
+    })
+    if (found === undefined) {
+      return null;
+    }
+    return found;
+  })
+  // public currentCharacter = signal<Character | null>(null);
   public currentCharacterIsSelected = signal<boolean>(false);
 
   public allCharactersOnMap = signal<Character[]>([]);
@@ -161,7 +178,7 @@ export class MultiplayerTestPageComponent implements OnInit {
   }
 
   selectCharacter(character: Character) {
-    this.currentCharacter.set(character);
+    // this.currentCharacter.set(character);
     this.uiState.set(this.uiStates.Map);
     const user = this.currentUser();
     const battleId = this.currentBattleId();
@@ -195,10 +212,10 @@ export class MultiplayerTestPageComponent implements OnInit {
       this.updateCharacterPosition($event)
       return;
     }
-    if (cellOccupantIsCurrentCharacter) {
-      this.currentCharacterIsSelected.set(false);
-      return;
-    }
+    // if (cellOccupantIsCurrentCharacter) {
+    //   this.currentCharacterIsSelected.set(false);
+    //   return;
+    // }
     if (!cellIsEmpty && this.currentCharacterIsSelected()) {
       this.enemyAttacked (currentCellOccupant);
     }
@@ -210,8 +227,6 @@ export class MultiplayerTestPageComponent implements OnInit {
       character.xPosition = position.xIndex;
       character.yPosition = position.yIndex;
     }
-    console.log(position, character);
-    this.currentCharacter.set(character);
     const battleId = this.currentBattleId();
     if (battleId !== null && character !== null) {
       const message: CharacterMessageDTO = {
