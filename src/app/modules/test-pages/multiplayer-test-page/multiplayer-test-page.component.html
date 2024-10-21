@@ -40,14 +40,17 @@
     }
     @case (uiStates.Map) {
         <div>Current Players:</div>
-        @for (user of usersInBattle(); track user.userId) {
-            <div>
-                <div>Name: {{user.name}}</div>
-            </div>
-        }
+        <div style="display: flex; flex-direction: row; gap: 8px;">
+            @for (user of usersInBattle(); track user.userId) {
+                <div style="width: 150px ">
+                    <div>Name: {{user.name}}</div>
+                </div>
+            }
+        </div>
         <div> Current Characters</div>
+        <div style="display: flex; flex-direction: row; gap: 8px">
         @for (character of allCharactersOnMap(); track character.characterId) {
-            <div>
+            <div style="width: 150px ">
                 <div>Name: {{ character.name }}</div>
                 <div>Class: {{ this.classService.getNameByClassId(character.classId)}}</div>
                 <div>HitPoints: {{ character.hitPoints}}</div>
@@ -55,6 +58,7 @@
                 <div>yPosition: {{ character.yPosition}}</div>
             </div>
         }
+        </div>
         @if (currentCharacter()?.xPosition === null && currentCharacter()?.yPosition === null) {
             <h4>Select Character to move them onto the battle field</h4>
             <img [src]="currentCharacter()?.image" (click)="currentCharacterSelected()">
