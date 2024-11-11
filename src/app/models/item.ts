@@ -5,6 +5,8 @@ export interface Item {
     name: string;
     weight: number;
     abilities: Ability[];
+    xPosition: number;
+    yPosition: number;
 }
 
 export interface CreateItemDto {
