@@ -1,12 +1,12 @@
 import { Ability } from "./ability";
+import { Position} from "./position"
 
 export interface Item {
     itemId: number;
     name: string;
     weight: number;
     abilities: Ability[];
-    xPosition: number;
-    yPosition: number;
+    position: Position;
 }
 
 export interface CreateItemDto {

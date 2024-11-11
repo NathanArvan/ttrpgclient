@@ -1,5 +1,6 @@
 import { Character } from "./character";
 import { Item } from "./item";
+import { Map } from "./map";
 import { User } from "./user";
 
 export interface Battle {
@@ -8,6 +9,12 @@ export interface Battle {
     characters: Character[] | null;
     items: Item[];
 }
+
+export interface CreateBattleDTO {
+    map: Map;
+    characters: Character[];
+    items: Item[];
+} 
 
 export interface UserJoinedDTO {
     battleId: number;

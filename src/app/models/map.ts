@@ -1,3 +1,4 @@
+import { Position } from "./position";
 import { Token } from "./token";
 
 export interface Map {
@@ -6,7 +7,12 @@ export interface Map {
     image: string;
     length: number;
     width: number;
-    tokens: Token[];
+    obstacles: Obstacle[];
+}
+
+export interface Obstacle {
+    position: Position;
+    image: string;
 }
 
 export interface MapCreateDTO {
