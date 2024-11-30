@@ -15,21 +15,6 @@ export interface Obstacle {
     image: string;
 }
 
-export interface MapCreateDTO {
-    campaignId: number | null;
-    image: string | null;
-    length: number;
-    width: number;
-}
-
-export interface MapUpdateDTO {
-    mapId: number;
-    campaignId: number | null;
-    image: string | null;
-    length: number;
-    width: number;
-}
-
 export interface MapCell {
     image: string | null;
     borderClass: string | null;
