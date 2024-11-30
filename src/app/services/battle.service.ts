@@ -23,4 +23,6 @@ export class BattleService {
   public updateBattle(body: Battle) {
     return this.client.put<Battle>(`${this.baseURL}/battle/`, body)
   }
+
+  public getBattles() {}
 }
