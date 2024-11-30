@@ -1,6 +1,0 @@
-@if(currentUser() === null) {
-    <app-user-sign-in (userLoaded)="onUserLoad($event)"></app-user-sign-in>
-}
-@if(currentUser() !== null) {
-    <app-character-manager [currentUser]="currentUser()"></app-character-manager>
-}

@@ -3,7 +3,6 @@ import { Injectable } from '@angular/core';
 import { environment } from '../../environment';
 import { Ability, CreateAbilityDTO } from '../models/ability';
 import { of } from 'rxjs';
-import { IconsModule } from '../modules/icons/icons.module';
 
 @Injectable({
   providedIn: 'root'
